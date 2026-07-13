@@ -31,7 +31,7 @@ const DashboardPage = () => {
     }, [session, isPending, router]);
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#F0F7F4] via-white to-[#F8F5EC]">
+        <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-[#F0F7F4] via-white to-[#F8F5EC]">
             <div className="rounded-3xl border border-[#D4AF37]/20 bg-white px-10 py-8 shadow-2xl">
                 <div className="flex flex-col items-center gap-4">
                     {/* Loading Spinner */}

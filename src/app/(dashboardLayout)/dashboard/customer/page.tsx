@@ -256,7 +256,7 @@ const CustomerPage = () => {
 
                                 <div className="space-y-5">
 
-                                    {dashboard.recentBookings.map((booking) => (
+                                    {dashboard?.recentBookings.map((booking) => (
                                         <div
                                             key={booking._id}
                                             className="rounded-2xl border border-[#D4AF37]/20 p-4 transition-all duration-300 hover:bg-[#F0F7F4]"
