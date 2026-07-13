@@ -101,9 +101,11 @@ export const fetchPendingVenues = async () => {
   );
 };
 
-export const fetchAllVenues = async () => {
+export const fetchAllVenues = async (
+  status = "all"
+) => {
   return await serverFetch(
-    "/api/admin/venues",
+    `/api/admin/venues?status=${status}`,
     true
   );
 };

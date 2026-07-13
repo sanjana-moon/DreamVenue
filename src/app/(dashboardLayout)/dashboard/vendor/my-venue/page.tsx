@@ -1,23 +1,25 @@
-import { Suspense } from "react";
-import { headers } from "next/headers";
-import { Spinner } from "@heroui/react";
-
 import { auth } from "@/lib/auth";
-import { myVenues } from "@/lib/api/venues/data";
-import ManageVenuesPage from "./ManageVenues";
+import { headers } from "next/headers";
+import { Suspense } from "react";
+
+import { Spinner } from "@heroui/react";
+import { fetchVendorVenues } from "@/lib/api/venues/data";
+import ManageVenuePage from "./MyVenue";
 
 const ManageVenues = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
 
-  const venues = await myVenues(session?.user?.email ?? "");
+    const venues = await fetchVendorVenues(
+        session?.user?.email || ""
+    );
 
-  return (
-    <Suspense fallback={<Spinner size="lg" />}>
-      <ManageVenuesPage venues={venues} />
-    </Suspense>
-  );
+    return (
+        <Suspense fallback={<Spinner />}>
+            <ManageVenuePage venues={venues} />
+        </Suspense>
+    );
 };
 
 export default ManageVenues;

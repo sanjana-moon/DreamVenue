@@ -60,7 +60,7 @@ const vendorMenu = [
         key: "venues",
         label: "My Venues",
         icon: FaBuilding,
-        href: "/dashboard/vendor/my-venues",
+        href: "/dashboard/vendor/my-venue",
     },
     {
         key: "bookings",
