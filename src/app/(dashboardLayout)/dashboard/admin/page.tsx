@@ -1,14 +1,10 @@
-import { ReactNode } from "react";
-import { roleValidator } from "@/lib/api/session";
+import { fetchAdminDashboard } from "@/lib/api/venues/data";
+import AdminDashboardClient from "./AdminDashboardClient";
 
-interface AdminLayoutProps {
-  children: ReactNode;
-}
+const AdminDashboardPage = async () => {
+  const dashboard = await fetchAdminDashboard();
 
-const AdminLayout = async ({ children }: AdminLayoutProps) => {
-  await roleValidator("admin");
-
-  return <>{children}</>;
+  return <AdminDashboardClient dashboard={dashboard} />;
 };
 
-export default AdminLayout;
+export default AdminDashboardPage;

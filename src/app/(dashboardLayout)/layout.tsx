@@ -9,7 +9,7 @@ const DashboardLayout = ({
     children: ReactNode;
 }) => {
     return (
-        <div className="min-h-screen flex bg-linear-to-br from-[#F0F7F4] via-white to-[#F8F5EC]">
+        <div className="min-h-screen flex bg-[#F0F7F4]">
             <DashboardSideBar />
             <div className="container w-full px-6 py-10">
                 {children}

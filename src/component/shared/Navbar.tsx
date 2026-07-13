@@ -27,10 +27,7 @@ const Navbar = () => {
     const [isAuthMenuOpen, setIsAuthMenuOpen] = useState(false);
 
     const { data: session } = authClient.useSession();
-    const user = session?.user;
-
-    console.log(session);
-    
+    const user = session?.user;    
 
     useEffect(() => {
         setIsMounted(true);

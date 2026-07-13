@@ -71,7 +71,7 @@ const AddVenuePage = () => {
             if (result.insertedId) {
                 toast.success("Venue submitted successfully");
                 reset();
-                router.push("/dashboard/vendor/my-venues");
+                router.push("/dashboard/vendor/my-venue");
             }
         } catch (error) {
             toast.error("Failed to submit venue");
