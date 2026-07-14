@@ -29,7 +29,7 @@ export async function POST(req: Request) {
         const {
             venueId,
             venueName,
-            eventDate,
+            bookingDate,
             guests: guestCount,
             amount: totalAmount,
         } = body;
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
         if (
             !venueId ||
             !venueName ||
-            !eventDate ||
+            !bookingDate ||
             !guestCount ||
             !totalAmount
         ) {
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
                 paymentType: "venue_booking",
                 venueId,
                 venueName,
-                eventDate,
+                bookingDate,
                 guestCount: guestCount.toString(),
                 totalAmount: totalAmount.toString(),
                 userId: user.id,

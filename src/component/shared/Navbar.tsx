@@ -14,7 +14,6 @@ import Link from "next/link";
 
 import logo from "@/component/assets/images/Logo.png";
 import { authClient } from "@/lib/auth-client";
-import { log } from "console";
 
 const Navbar = () => {
     const pathname = usePathname();
@@ -103,17 +102,17 @@ const Navbar = () => {
             {
                 key: "addVenue",
                 label: "Add Venue",
-                href: "/dashboard/add-venue",
+                href: "/dashboard/vendor/add-venue",
             },
             {
                 key: "myVenues",
                 label: "My Venues",
-                href: "/dashboard/my-venues",
+                href: "/dashboard/vendor/my-venues",
             },
             {
                 key: "bookings",
                 label: "Venue Bookings",
-                href: "/dashboard/vendor-bookings",
+                href: "/dashboard/vendor/vendor-bookings",
             },
         ];
     } else {
@@ -126,7 +125,7 @@ const Navbar = () => {
             {
                 key: "bookings",
                 label: "My Bookings",
-                href: "/dashboard/my-bookings",
+                href: "/dashboard/bookings",
             },
             {
                 key: "profile",
@@ -217,7 +216,7 @@ const Navbar = () => {
                                         damping: 15,
                                     }}
                                     onClick={handleSignOut}
-                                    className="bg-primary text-white"
+                                    className="bg-primary text-white rounded-md"
                                 >
                                     <MdLogout />
                                     Logout

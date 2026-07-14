@@ -33,7 +33,7 @@ export default function VenueBookingWidget({
     const user = session?.user;
 
     const [guests, setGuests] = useState(100);
-    const [eventDate, setEventDate] = useState("");
+    const [bookingDate, setBookingDate] = useState("");
     const [eventType, setEventType] = useState("");
     const [note, setNote] = useState("");
     const [submitting, setSubmitting] = useState(false);
@@ -58,10 +58,10 @@ export default function VenueBookingWidget({
         loadBookedDates();
     }, [venueId]);
 
-    const dateIsTaken = eventDate !== "" && bookedDates.includes(eventDate);
+    const dateIsTaken = bookingDate !== "" && bookedDates.includes(bookingDate);
 
     const handleBooking = async () => {
-        if (!eventDate) {
+        if (!bookingDate) {
             return;
         }
 
@@ -76,7 +76,7 @@ export default function VenueBookingWidget({
                 type: "venue_booking",
                 venueId,
                 venueName,
-                eventDate,
+                bookingDate,
                 eventType,
                 guests,
                 note,
@@ -93,7 +93,7 @@ export default function VenueBookingWidget({
 
             if (res.status === 409) {
                 const data = await res.json();
-                setBookedDates((prev) => [...prev, eventDate]);
+                setBookedDates((prev) => [...prev, bookingDate]);
                 console.error(data?.message);
                 return;
             }
@@ -170,9 +170,9 @@ export default function VenueBookingWidget({
                                         </Label>
                                         <Input
                                             type="date"
-                                            value={eventDate}
+                                            value={bookingDate}
                                             onChange={(e) =>
-                                                setEventDate(e.target.value)
+                                                setBookingDate(e.target.value)
                                             }
                                             className="mt-2"
                                         />
@@ -241,7 +241,7 @@ export default function VenueBookingWidget({
                                     </TextField>
 
                                     <Button
-                                        isDisabled={!eventDate || dateIsTaken || submitting}
+                                        isDisabled={!bookingDate || dateIsTaken || submitting}
                                         onPress={handleBooking}
                                         className="w-full bg-[#0A2F1D] text-white hover:bg-[#1E6B4F] font-bold rounded-xl transition-colors"
                                     >

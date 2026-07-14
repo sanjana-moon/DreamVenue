@@ -31,58 +31,68 @@ export default async function PaymentSuccess({
         throw new Error("Please provide a valid session_id");
     }
 
-    const session =
-        await stripe.checkout.sessions.retrieve(
-            session_id,
+    const session = await stripe.checkout.sessions.retrieve(
+        session_id,
+        {
+            expand: ["payment_intent"],
+        }
+    );
+
+    // Fix TypeScript issue
+    const transactionId =
+        typeof session.payment_intent === "string"
+            ? session.payment_intent
+            : session.payment_intent?.id ?? "";
+
+    const paymentData = {
+        venueId: session.metadata?.venueId,
+        venueName: session.metadata?.venueName,
+        bookingDate: session.metadata?.bookingDate,
+        guestCount: Number(session.metadata?.guestCount),
+        email: session.metadata?.email,
+        amount: Number(session.metadata?.totalAmount),
+        paymentType: session.metadata?.paymentType,
+        transactionId,
+        paymentStatus: session.payment_status,
+    };
+
+    try {
+        const res = await fetch(
+            `${baseURL}/api/bookings`,
             {
-                expand: [
-                    "line_items",
-                    "payment_intent",
-                ],
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/json",
+                },
+                body: JSON.stringify(paymentData),
+                cache: "no-store",
             }
         );
 
-    const paymentData = {
-        venueId: session?.metadata?.venueId,
-        venueName: session?.metadata?.venueName,
-        eventDate: session?.metadata?.eventDate,
-        guestCount: Number(
-            session?.metadata?.guestCount
-        ),
-        email: session?.metadata?.email,
-        amount: Number(
-            session?.metadata?.totalAmount
-        ),
-        paymentType:
-            session?.metadata?.paymentType,
-        transactionId:
-            session?.payment_intent?.id,
-        paymentStatus:
-            session?.payment_status,
-    };
-
-    await fetch(
-        `${baseURL}/api/venues/bookings`,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type":
-                    "application/json",
-            },
-            body: JSON.stringify(paymentData),
+        if (!res.ok) {
+            console.error(
+                "Booking API Error:",
+                await res.text()
+            );
         }
-    );
+    } catch (error) {
+        console.error(
+            "Failed to save booking:",
+            error
+        );
+    }
 
     return (
         <div className="min-h-screen bg-[#F8F6F2] flex items-center justify-center px-6 py-16">
 
-            <Card className="w-full max-w-2xl rounded-3xl shadow-2xl border border-[#D4AF37]/20 overflow-hidden">
+            <Card className="w-full max-w-2xl overflow-hidden rounded-3xl border border-[#D4AF37]/20 shadow-2xl">
 
-                {/* Success Header */}
+                {/* Header */}
 
                 <CardHeader className="flex flex-col items-center justify-center gap-5 bg-gradient-to-br from-[#0A2F1D] to-[#174A31] py-12">
 
-                    <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center">
+                    <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white">
                         <FaCheckCircle
                             size={58}
                             className="text-green-600"
@@ -90,26 +100,22 @@ export default async function PaymentSuccess({
                     </div>
 
                     <div className="text-center">
-
                         <h1 className="text-4xl font-black text-white">
                             Booking Confirmed
                         </h1>
 
-                        <p className="text-white/80 mt-2">
-                            Thank you for booking with
-                            DreamVenue.
+                        <p className="mt-2 text-white/80">
+                            Thank you for booking with DreamVenue.
                         </p>
-
                     </div>
 
                 </CardHeader>
 
                 <div className="p-8">
-                    {/* Booking Details */}
 
                     <div className="rounded-3xl border border-[#D4AF37]/20 bg-[#FCFBF8] p-8">
 
-                        <h2 className="text-2xl font-bold text-[#0A2F1D] mb-8">
+                        <h2 className="mb-8 text-2xl font-bold text-[#0A2F1D]">
                             Booking Details
                         </h2>
 
@@ -119,13 +125,14 @@ export default async function PaymentSuccess({
 
                                 <div className="flex items-center gap-3">
                                     <FaMapMarkerAlt className="text-[#D4AF37]" />
+
                                     <span className="text-[#12201B]/60">
                                         Venue
                                     </span>
                                 </div>
 
                                 <span className="font-semibold text-[#0A2F1D]">
-                                    {session?.metadata?.venueName}
+                                    {session.metadata?.venueName}
                                 </span>
 
                             </div>
@@ -134,13 +141,14 @@ export default async function PaymentSuccess({
 
                                 <div className="flex items-center gap-3">
                                     <FaCalendarAlt className="text-[#D4AF37]" />
+
                                     <span className="text-[#12201B]/60">
                                         Event Date
                                     </span>
                                 </div>
 
                                 <span className="font-semibold text-[#0A2F1D]">
-                                    {session?.metadata?.eventDate}
+                                    {session.metadata?.bookingDate}
                                 </span>
 
                             </div>
@@ -149,25 +157,25 @@ export default async function PaymentSuccess({
 
                                 <div className="flex items-center gap-3">
                                     <FaUsers className="text-[#D4AF37]" />
+
                                     <span className="text-[#12201B]/60">
                                         Guests
                                     </span>
                                 </div>
 
                                 <span className="font-semibold text-[#0A2F1D]">
-                                    {session?.metadata?.guestCount}
+                                    {session.metadata?.guestCount}
                                 </span>
 
                             </div>
-
                             <div className="flex items-center justify-between border-b border-[#D4AF37]/10 pb-4">
 
                                 <span className="text-[#12201B]/60">
                                     Customer Email
                                 </span>
 
-                                <span className="font-semibold text-[#0A2F1D]">
-                                    {session?.customer_email}
+                                <span className="font-semibold text-[#0A2F1D] break-all">
+                                    {session.customer_email}
                                 </span>
 
                             </div>
@@ -178,8 +186,8 @@ export default async function PaymentSuccess({
                                     Transaction ID
                                 </span>
 
-                                <span className="max-w-[220px] truncate font-semibold text-blue-700">
-                                    {session?.payment_intent?.id}
+                                <span className="max-w-[240px] truncate font-semibold text-[#1E6B4F]">
+                                    {transactionId}
                                 </span>
 
                             </div>
@@ -191,7 +199,7 @@ export default async function PaymentSuccess({
                                 </span>
 
                                 <span className="rounded-full bg-green-100 px-4 py-1 text-sm font-semibold capitalize text-green-700">
-                                    {session?.payment_status}
+                                    {session.payment_status}
                                 </span>
 
                             </div>
@@ -203,7 +211,7 @@ export default async function PaymentSuccess({
                                 </span>
 
                                 <span className="text-3xl font-black text-[#D4AF37]">
-                                    ৳{session?.metadata?.totalAmount}
+                                    ৳{session.metadata?.totalAmount}
                                 </span>
 
                             </div>
@@ -211,16 +219,15 @@ export default async function PaymentSuccess({
                         </div>
 
                     </div>
-                    {/* Footer */}
 
-                    <CardFooter className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-10">
+                    <CardFooter className="flex flex-col items-center justify-center gap-4 pt-10 sm:flex-row">
 
                         <Link
-                            href="/dashboard/customer/my-bookings"
+                            href="/dashboard/customer/bookings"
                             className="w-full sm:w-auto"
                         >
                             <Button
-                                className="w-full bg-[#0A2F1D] hover:bg-[#174A31] text-white font-semibold rounded-xl"
+                                className="w-full rounded-xl bg-[#0A2F1D] font-semibold text-white hover:bg-[#1E6B4F]"
                                 endContent={<FaArrowRight />}
                             >
                                 View My Bookings
@@ -233,7 +240,7 @@ export default async function PaymentSuccess({
                         >
                             <Button
                                 variant="bordered"
-                                className="w-full border-[#D4AF37] text-[#0A2F1D] hover:bg-[#F8F6F2] rounded-xl"
+                                className="w-full rounded-xl border-[#D4AF37] text-[#0A2F1D]"
                             >
                                 Browse More Venues
                             </Button>
