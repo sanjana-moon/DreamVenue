@@ -9,6 +9,7 @@ import {
     deleteVenue,
     ApprovalStatus,
 } from "@/lib/api/venues/actions"; 
+import EditVenueModal from "@/component/venues/EditVenue";
 
 interface Venue {
     _id: string;
@@ -16,6 +17,10 @@ interface Venue {
     category: string;
     pricePerEvent: number;
     approvalStatus: ApprovalStatus;
+    location?: string;   
+    capacity?: number;   
+    description?: string;
+    image?: string;        
 }
 
 interface ManageInventoryPageProps {
@@ -32,10 +37,8 @@ const ManageInventoryPage = ({ venues: initialVenues }: ManageInventoryPageProps
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [editingVenue, setEditingVenue] = useState<Venue | null>(null);
 
-    // Explicit venue removal handler using deleteVenue
     const handleDeleteVenue = async (id: string): Promise<void> => {
         try {
-            // Optimistically clean the local array
             setVenues((prev) => prev.filter((v) => v._id !== id));
             await deleteVenue(id);
         } catch (err) {
@@ -85,8 +88,7 @@ const ManageInventoryPage = ({ venues: initialVenues }: ManageInventoryPageProps
                                             <th className="px-6 py-4 font-bold text-sm">Category</th>
                                             <th className="px-6 py-4 font-bold text-sm">Price Per Event</th>
                                             <th className="px-6 py-4 font-bold text-sm">Verification</th>
-                                            <th className="px-6 py-4 font-bold text-sm">Visibility</th>
-                                            <th className="px-6 py-4 font-bold text-sm text-center">Actions</th>
+                                            <th className="px-6 py-4 font-bold text-sm-center">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-[#0A2F1D]/5">
@@ -176,6 +178,14 @@ const ManageInventoryPage = ({ venues: initialVenues }: ManageInventoryPageProps
                     )}
                 </Card>
             </div>
+
+            {/* Render Edit Modal Component */}
+            <EditVenueModal
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
+                editingVenue={editingVenue}
+                setEditingVenue={setEditingVenue}
+            />
         </div>
     );
 };
