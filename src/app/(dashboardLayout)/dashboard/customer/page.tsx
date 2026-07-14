@@ -99,7 +99,7 @@ const CustomerPage = () => {
         },
         {
             title: "Total Spent",
-            value: `৳${dashboard?.totalSpent ?? 0}`,
+            value: `$${dashboard?.totalSpent ?? 0}`,
             icon: <FaMoneyBillWave size={24} />,
         },
     ];
@@ -292,7 +292,7 @@ const CustomerPage = () => {
                                                     Total Cost
                                                 </span>
                                                 <span className="text-lg font-bold text-[#0A2F1D]">
-                                                    ৳{booking.totalPrice}
+                                                    ${booking.totalPrice}
                                                 </span>
                                             </div>
                                         </div>

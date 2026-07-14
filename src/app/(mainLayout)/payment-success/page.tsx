@@ -211,7 +211,7 @@ export default async function PaymentSuccess({
                                 </span>
 
                                 <span className="text-3xl font-black text-[#D4AF37]">
-                                    ৳{session.metadata?.totalAmount}
+                                    ${session.metadata?.totalAmount}
                                 </span>
 
                             </div>

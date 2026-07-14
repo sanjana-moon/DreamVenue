@@ -169,7 +169,7 @@ export default async function VenueDetailsPage({
                     <div className="sticky top-6 space-y-6">
                         
                         {/* Contact Card */}
-                        <Card shadow="sm" className="p-5 border border-gray-100 rounded-2xl bg-white">
+                        <Card className="p-5 border border-gray-100 rounded-2xl bg-white shadow-sm">
                             <h3 className="text-base font-bold text-[#0A2F1D] mb-4">Contact Us</h3>
                             <div className="space-y-3 text-sm">
                                 <div className="flex justify-between items-center py-1">
@@ -194,7 +194,7 @@ export default async function VenueDetailsPage({
                             <div className="p-6 bg-white space-y-4">
                                 <div className="flex items-baseline justify-between mb-2">
                                     <span className="text-sm text-gray-500">Pricing Per Event</span>
-                                    <span className="text-2xl font-black text-[#174A31]">৳{venue.pricePerEvent}</span>
+                                    <span className="text-2xl font-black text-[#174A31]">${venue.pricePerEvent}</span>
                                 </div>
                                 
                                 <VenueBookingWidget

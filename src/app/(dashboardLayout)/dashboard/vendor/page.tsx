@@ -87,7 +87,7 @@ const VendorPage = () => {
         },
         {
             title: "Total Earnings",
-            value: `৳${stats?.totalEarnings ?? 0}`,
+            value: `$${stats?.totalEarnings ?? 0}`,
             icon: <FaMoneyBillWave size={24} />,
         },
         {

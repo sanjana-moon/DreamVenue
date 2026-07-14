@@ -159,7 +159,7 @@ const ManageVenuesClient = ({
                                         </td>
 
                                         <td className="px-6 py-5 font-bold text-emerald-700">
-                                            ৳{venue.pricePerEvent.toLocaleString()}
+                                            ${venue.pricePerEvent.toLocaleString()}
                                         </td>
 
                                         {/* Approval */}

@@ -94,6 +94,13 @@ export interface AdminDashboard {
     venuesByCategory: { category: string; value: number }[];
 }
 
+export interface Profile {
+    name: string;
+    email: string;
+    role: UserRole;
+    profileImage?: string;
+}
+
 /* ============================
    CUSTOMER
 ============================ */
@@ -206,6 +213,13 @@ export const fetchTransactions = async () => {
 export const fetchAdminDashboard = async () => {
     return await serverFetch<AdminDashboard>(
         "/api/admin/dashboard",
+        true
+    );
+};
+
+export const fetchProfile = async () => {
+    return await serverFetch<Profile>(
+        "/api/profile",
         true
     );
 };

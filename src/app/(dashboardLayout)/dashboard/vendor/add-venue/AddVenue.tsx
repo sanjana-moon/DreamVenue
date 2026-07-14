@@ -180,7 +180,7 @@ const AddVenuePage = () => {
                                 </label>
                                 <Input
                                     type="number"
-                                    label="Price Per Event (৳)"
+                                    label="Price Per Event ($)"
                                     placeholder="Enter the price"
                                     className="w-full"
                                     {...register("pricePerEvent", {

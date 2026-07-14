@@ -94,7 +94,7 @@ const ManageInventoryPage = ({ venues: initialVenues }: ManageInventoryPageProps
                                             <tr key={venue._id} className="hover:bg-[#F0F7F4]/50 transition-colors duration-200">
                                                 <td className="px-6 py-5 font-semibold text-[#0A2F1D]">{venue.name}</td>
                                                 <td className="px-6 py-5 text-sm font-medium text-[#12201B]/80">{venue.category}</td>
-                                                <td className="px-6 py-5 text-sm font-bold text-[#0A2F1D]">৳{venue.pricePerEvent.toLocaleString()}</td>
+                                                <td className="px-6 py-5 text-sm font-bold text-[#0A2F1D]">${venue.pricePerEvent.toLocaleString()}</td>
                                                 <td className="px-6 py-5">
                                                     <span className={`inline-flex px-3 py-1 rounded-full text-xs font-bold capitalize shadow-sm ${venue.approvalStatus === "approved"
                                                         ? "bg-green-100 text-green-800 border border-green-200"
@@ -139,7 +139,7 @@ const ManageInventoryPage = ({ venues: initialVenues }: ManageInventoryPageProps
                                     <Card key={venue._id} className="bg-white border border-[#0A2F1D]/10 rounded-xl shadow-sm p-4 space-y-4">
                                         <div className="flex justify-between items-start gap-2">
                                             <h3 className="font-bold text-[#0A2F1D] text-base leading-tight">{venue.name}</h3>
-                                            <span className="text-sm font-bold text-[#D4AF37] whitespace-nowrap">৳{venue.pricePerEvent.toLocaleString()}</span>
+                                            <span className="text-sm font-bold text-[#D4AF37] whitespace-nowrap">${venue.pricePerEvent.toLocaleString()}</span>
                                         </div>
 
                                         <div className="text-xs space-y-1 text-[#12201B]/80">

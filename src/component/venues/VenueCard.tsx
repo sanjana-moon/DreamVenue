@@ -71,7 +71,7 @@ const VenueCard = ({ venue }: VenueCardProps) => {
                         </h2>
 
                         <span className="text-lg font-bold text-[#D4AF37] whitespace-nowrap">
-                            ৳{venue.pricePerEvent.toLocaleString()}
+                            ${venue.pricePerEvent.toLocaleString()}
                         </span>
 
                     </div>

@@ -82,7 +82,7 @@ const AdminDashboardClient = ({
                         </h3>
 
                         <h1 className="text-4xl font-bold mt-2 text-red-600">
-                            ৳{dashboard.totalRevenue.toLocaleString()}
+                            ${dashboard.totalRevenue.toLocaleString()}
                         </h1>
                     </Card>
 

@@ -160,7 +160,7 @@ export default function VenueBookingWidget({
                                         </span>
 
                                         <span className="text-[#D4AF37] font-bold text-xl">
-                                            ৳{price}
+                                            ${price}
                                         </span>
                                     </div>
 
