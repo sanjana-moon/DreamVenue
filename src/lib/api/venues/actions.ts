@@ -32,7 +32,6 @@ export interface ReviewInput {
 }
 
 export type ApprovalStatus = "pending" | "approved" | "rejected";
-export type PublishStatus = "published" | "unpublished";
 export type BookingStatus = "Pending" | "Confirmed" | "Completed" | "Cancelled";
 export type UserRole = "customer" | "vendor" | "admin";
 
@@ -96,7 +95,7 @@ export const deleteReview = async (id: string) => {
 };
 
 // ============================
-// ADMIN — VENUE APPROVAL / PUBLISH
+// ADMIN — VENUE APPROVAL
 // ============================
 
 export const updateVenueApprovalStatus = async (
@@ -104,19 +103,6 @@ export const updateVenueApprovalStatus = async (
     id: string
 ) => {
     const result = await serverMutation(`/api/admin/venues/${id}`, "PATCH", data);
-    revalidatePath("/dashboard/admin/manage-venues");
-    return result;
-};
-
-export const toggleVenuePublish = async (
-    data: { publishStatus: PublishStatus },
-    id: string
-) => {
-    const result = await serverMutation(
-        `/api/admin/venues/${id}/publish`,
-        "PATCH",
-        data
-    );
     revalidatePath("/dashboard/admin/manage-venues");
     return result;
 };

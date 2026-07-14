@@ -11,10 +11,12 @@ import { motion } from "motion/react";
 
 import { FaSearch } from "react-icons/fa";
 import { BiLeftArrow, BiRightArrow } from "react-icons/bi";
+
 import VenueCard from "@/component/venues/VenueCard";
+import type { Venue } from "@/lib/api/venues/data";
 
 interface BrowseVenuesClientProps {
-    initialVenues: any[];
+    initialVenues: Venue[];
     totalVenues: number;
     totalPages: number;
     currentPage: number;
@@ -54,6 +56,7 @@ const BrowseVenuesClient = ({
         }, 400);
 
         return () => clearTimeout(timer);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search]);
 
     const updateQueryParams = (
@@ -64,8 +67,8 @@ const BrowseVenuesClient = ({
 
         if (
             value &&
-            value !== "all" &&
-            value !== ""
+            value !== "" &&
+            value !== "all"
         ) {
             params.set(key, String(value));
         } else {
@@ -80,6 +83,7 @@ const BrowseVenuesClient = ({
             scroll: false,
         });
     };
+
     const categories = [
         "all",
         "Wedding",
@@ -93,41 +97,64 @@ const BrowseVenuesClient = ({
         "Community Hall",
         "Other",
     ];
+
     return (
-        <div className="min-h-screen bg-[#F8F5EF]">
+        <div className="min-h-screen bg-[#F0F7F4]">
 
             <div className="container mx-auto px-4 py-10">
+
+                {/* Hero */}
 
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-center mb-10"
+                    className="relative overflow-hidden bg-gradient-to-r from-[#0A2F1D] via-[#1E6B4F] to-[#0A2F1D] rounded-3xl py-16 px-8 text-center shadow-xl mb-10"
                 >
-                    <h1 className="text-5xl font-bold text-[#2D1B69]">
-                        Browse Venues
+                    {/* Decorative gold accent line */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-[#D4AF37]" />
+
+                    <h1 className="text-5xl font-bold text-white">
+                        Find Your Perfect Venue
                     </h1>
-                    <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
-                        Discover beautiful venues for weddings, corporate events,
-                        birthday parties, conferences and more.
+
+                    <p className="text-white/90 mt-5 max-w-3xl mx-auto text-lg">
+                        Discover elegant venues for weddings,
+                        birthdays, conferences, corporate events,
+                        concerts and unforgettable celebrations.
                     </p>
+
                 </motion.div>
+
+                {/* Filters */}
+
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="bg-white rounded-3xl shadow-lg border border-[#D4AF37]/20 p-6 mb-8"
+                    transition={{ delay: 0.2 }}
+                    className="bg-white rounded-3xl shadow-xl border border-[#D4AF37]/30 p-6 mb-8"
                 >
 
                     <div className="grid lg:grid-cols-5 gap-4">
-                        <div className="flex items-center gap-3 border rounded-xl px-4">
+
+                        {/* Search */}
+
+                        <div className="flex items-center gap-3 bg-[#F0F7F4] border border-[#D4AF37]/30 rounded-xl px-4 focus-within:border-[#1E6B4F] transition-colors">
+
                             <FaSearch className="text-[#D4AF37]" />
+
                             <input
                                 type="text"
+                                placeholder="Search venues..."
                                 value={search}
-                                placeholder="Search venue..."
-                                onChange={(e) => setSearch(e.target.value)}
-                                className="w-full py-3 outline-none"
+                                onChange={(e) =>
+                                    setSearch(e.target.value)
+                                }
+                                className="w-full py-3 bg-transparent outline-none text-[#12201B] placeholder:text-[#12201B]/40"
                             />
+
                         </div>
+
+                        {/* Category */}
 
                         <select
                             value={currentCategory}
@@ -137,22 +164,24 @@ const BrowseVenuesClient = ({
                                     e.target.value
                                 )
                             }
-                            className="border rounded-xl px-4 py-3"
+                            className="bg-[#F0F7F4] border border-[#D4AF37]/30 rounded-xl px-4 py-3 outline-none focus:border-[#1E6B4F] text-[#12201B] transition-colors"
                         >
-                            {categories.map(category => (
+
+                            {categories.map((category) => (
 
                                 <option
                                     key={category}
                                     value={category}
                                 >
-
-                                    {category}
-
+                                    {category === "all" ? "All Categories" : category}
                                 </option>
 
                             ))}
 
                         </select>
+
+                        {/* Sort */}
+
                         <select
                             value={currentSort}
                             onChange={(e) =>
@@ -161,18 +190,19 @@ const BrowseVenuesClient = ({
                                     e.target.value
                                 )
                             }
-                            className="border rounded-xl px-4 py-3"
+                            className="bg-[#F0F7F4] border border-[#D4AF37]/30 rounded-xl px-4 py-3 outline-none focus:border-[#1E6B4F] text-[#12201B] transition-colors"
                         >
+
                             <option value="name">
                                 Name A-Z
                             </option>
 
                             <option value="price-low">
-                                Price Low-High
+                                Price: Low → High
                             </option>
 
                             <option value="price-high">
-                                Price High-Low
+                                Price: High → Low
                             </option>
 
                             <option value="rating">
@@ -185,115 +215,141 @@ const BrowseVenuesClient = ({
 
                         </select>
 
+                        {/* Min Price */}
+
                         <input
                             type="number"
                             placeholder="Min Price"
                             value={minPrice}
                             onChange={(e) => {
                                 setMinPrice(e.target.value);
+
                                 updateQueryParams(
                                     "minPrice",
                                     e.target.value
                                 );
                             }}
-                            className="border rounded-xl px-4 py-3"
+                            className="bg-[#F0F7F4] border border-[#D4AF37]/30 rounded-xl px-4 py-3 outline-none focus:border-[#1E6B4F] text-[#12201B] placeholder:text-[#12201B]/40 transition-colors"
                         />
+
+                        {/* Max Price */}
+
                         <input
                             type="number"
                             placeholder="Max Price"
                             value={maxPrice}
                             onChange={(e) => {
                                 setMaxPrice(e.target.value);
+
                                 updateQueryParams(
                                     "maxPrice",
                                     e.target.value
                                 );
                             }}
-                            className="border rounded-xl px-4 py-3"
+                            className="bg-[#F0F7F4] border border-[#D4AF37]/30 rounded-xl px-4 py-3 outline-none focus:border-[#1E6B4F] text-[#12201B] placeholder:text-[#12201B]/40 transition-colors"
                         />
+
                     </div>
+
                 </motion.div>
-                <div className="mb-6">
-                    <p className="text-gray-600">
-                        Showing
-                        <span className="font-bold text-[#2D1B69]">
-                            {" "}
-                            {totalVenues}{" "}
-                        </span>
-                        venues
+
+                {/* Results summary */}
+
+                <div className="mb-6 flex items-center justify-between">
+                    <p className="text-[#12201B]/70 text-lg">
+                        Showing{" "}
+                        <span className="font-bold text-[#0A2F1D]">
+                            {totalVenues}
+                        </span>{" "}
+                        venue{totalVenues !== 1 ? "s" : ""}
                     </p>
                 </div>
+
                 {totalVenues === 0 ? (
-                    <div className="text-center py-20">
-                        <h2 className="text-3xl font-bold text-[#2D1B69]">
+                    <div className="bg-white rounded-3xl shadow-md border border-[#D4AF37]/20 py-20 text-center">
+                        <h2 className="text-3xl font-bold text-[#0A2F1D]">
                             No venues found
                         </h2>
-                        <p className="text-gray-500 mt-2">
+
+                        <p className="text-[#12201B]/60 mt-3">
                             Try changing your search or filters.
                         </p>
                     </div>
                 ) : (
                     <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.4 }}
+                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7"
+                        >
                             {initialVenues.map((venue) => (
                                 <VenueCard
                                     key={venue._id}
                                     venue={venue}
                                 />
                             ))}
-                        </div>
-                        <div className="flex justify-center gap-2 mt-10">
-                            <button
-                                disabled={currentPage === 1}
-                                onClick={() =>
-                                    updateQueryParams(
-                                        "page",
-                                        currentPage - 1
+                        </motion.div>
+
+                        {/* Pagination */}
+
+                        {totalPages > 1 && (
+                            <div className="flex justify-center items-center gap-3 mt-12">
+
+                                <button
+                                    disabled={currentPage === 1}
+                                    onClick={() =>
+                                        updateQueryParams(
+                                            "page",
+                                            currentPage - 1
+                                        )
+                                    }
+                                    className="w-11 h-11 rounded-xl bg-[#0A2F1D] text-white flex items-center justify-center hover:bg-[#1E6B4F] transition disabled:bg-[#12201B]/20 disabled:cursor-not-allowed"
+                                >
+                                    <BiLeftArrow size={18} />
+                                </button>
+
+                                {Array.from(
+                                    { length: totalPages },
+                                    (_, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() =>
+                                                updateQueryParams(
+                                                    "page",
+                                                    index + 1
+                                                )
+                                            }
+                                            className={`w-11 h-11 rounded-xl font-semibold transition ${currentPage === index + 1
+                                                    ? "bg-[#D4AF37] text-white shadow-md"
+                                                    : "bg-white border border-[#D4AF37]/30 text-[#12201B] hover:bg-[#F0F7F4]"
+                                                }`}
+                                        >
+                                            {index + 1}
+                                        </button>
                                     )
-                                }
-                                className="px-4 py-2 rounded-lg bg-[#2D1B69] text-white disabled:bg-gray-300"
-                            >
-                                <BiLeftArrow />
-                            </button>
-                            {Array.from(
-                                { length: totalPages },
-                                (_, i) => (
-                                    <button
-                                        key={i}
-                                        onClick={() =>
-                                            updateQueryParams(
-                                                "page",
-                                                i + 1
-                                            )
-                                        }
-                                        className={`w-10 h-10 rounded-lg ${currentPage === i + 1
-                                                ? "bg-[#D4AF37] text-white"
-                                                : "bg-gray-200"
-                                            }`}
-                                    >
-                                        {i + 1}
-                                    </button>
-                                )
-                            )}
-                            <button
-                                disabled={currentPage === totalPages}
-                                onClick={() =>
-                                    updateQueryParams(
-                                        "page",
-                                        currentPage + 1
-                                    )
-                                }
-                                className="px-4 py-2 rounded-lg bg-[#2D1B69] text-white disabled:bg-gray-300"
-                            >
-                                <BiRightArrow />
-                            </button>
-                        </div>
+                                )}
+
+                                <button
+                                    disabled={currentPage === totalPages}
+                                    onClick={() =>
+                                        updateQueryParams(
+                                            "page",
+                                            currentPage + 1
+                                        )
+                                    }
+                                    className="w-11 h-11 rounded-xl bg-[#0A2F1D] text-white flex items-center justify-center hover:bg-[#1E6B4F] transition disabled:bg-[#12201B]/20 disabled:cursor-not-allowed"
+                                >
+                                    <BiRightArrow size={18} />
+                                </button>
+
+                            </div>
+                        )}
                     </>
                 )}
             </div>
         </div>
     );
-
 };
 
 export default BrowseVenuesClient;

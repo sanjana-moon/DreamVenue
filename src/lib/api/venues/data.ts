@@ -20,7 +20,6 @@ export interface Venue {
     image: string;
     vendorEmail: string;
     approvalStatus: ApprovalStatus;
-    publishStatus: "published" | "unpublished";
     avgRating: number;
     reviewCount: number;
     bookingCount?: number;

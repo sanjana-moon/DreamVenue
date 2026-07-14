@@ -12,18 +12,10 @@ import {
     FaStar,
 } from "react-icons/fa";
 
+import type { Venue } from "@/lib/api/venues/data";
+
 interface VenueCardProps {
-    venue: {
-        _id: string;
-        image: string;
-        name: string;
-        location: string;
-        category: string;
-        capacity: number;
-        pricePerEvent: number;
-        avgRating: number;
-        publishStatus: "published" | "unpublished";
-    };
+    venue: Venue;
 }
 
 const VenueCard = ({ venue }: VenueCardProps) => {
@@ -49,19 +41,22 @@ const VenueCard = ({ venue }: VenueCardProps) => {
                         className="w-full h-60 object-cover"
                     />
 
+                    {/* Subtle gradient so the badge always reads clearly over any photo */}
+                    <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/40 to-transparent" />
+
                     <Chip
                         size="sm"
-                        color={
-                            venue.publishStatus === "published"
-                                ? "success"
-                                : "danger"
-                        }
-                        className="absolute top-3 right-3"
+                        className="absolute top-3 right-3 bg-[#D4AF37] text-[#0A2F1D] font-semibold"
                     >
-                        {venue.publishStatus === "published"
-                            ? "Available"
-                            : "Unavailable"}
+                        {venue.category}
                     </Chip>
+
+                    <div className="absolute bottom-3 left-3 flex items-center gap-1 rounded-full bg-white/90 backdrop-blur-sm px-3 py-1 shadow-sm">
+                        <FaStar className="text-[#D4AF37]" size={13} />
+                        <span className="text-sm font-bold text-[#12201B]">
+                            {venue.avgRating?.toFixed(1) || "New"}
+                        </span>
+                    </div>
 
                 </div>
 
@@ -71,7 +66,7 @@ const VenueCard = ({ venue }: VenueCardProps) => {
 
                     <div className="flex justify-between items-start gap-3">
 
-                        <h2 className="text-xl font-bold text-[#2D1B69] line-clamp-1">
+                        <h2 className="text-xl font-bold text-[#0A2F1D] line-clamp-1">
                             {venue.name}
                         </h2>
 
@@ -81,46 +76,38 @@ const VenueCard = ({ venue }: VenueCardProps) => {
 
                     </div>
 
-                    <div className="flex items-center gap-2 text-gray-500 text-sm">
+                    <div className="flex items-center gap-2 text-[#12201B]/60 text-sm">
 
                         <FaMapMarkerAlt className="text-[#D4AF37]" />
 
-                        <span>{venue.location}</span>
+                        <span className="line-clamp-1">{venue.location}</span>
 
                     </div>
 
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between pt-1">
 
                         <Chip
+                            size="sm"
+                            className="bg-[#F0F7F4] text-[#0A2F1D] font-medium border border-[#D4AF37]/20"
                         >
                             {venue.category}
                         </Chip>
 
-                        <div className="flex items-center gap-1 text-sm text-gray-600">
+                        <div className="flex items-center gap-1.5 text-sm text-[#12201B]/70">
 
                             <FaUsers className="text-[#D4AF37]" />
 
-                            {venue.capacity}
+                            {venue.capacity} guests
 
                         </div>
 
                     </div>
 
-                    <div className="flex items-center gap-2">
-
-                        <FaStar className="text-yellow-500" />
-
-                        <span className="font-semibold">
-                            {venue.avgRating?.toFixed(1) || "0.0"}
-                        </span>
-
-                    </div>
-
-                    <Link href={`/venues/${venue._id}`}>
+                    <Link href={`/venues/${venue._id}`} className="block pt-1">
 
                         <Button
                             fullWidth
-                            className="bg-[#2D1B69] hover:bg-[#241654] text-white rounded-xl font-semibold"
+                            className="bg-[#0A2F1D] hover:bg-[#1E6B4F] text-white rounded-xl font-semibold transition-colors"
                         >
                             View Details
                         </Button>
