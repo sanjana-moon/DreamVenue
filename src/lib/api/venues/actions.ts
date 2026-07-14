@@ -137,11 +137,19 @@ export const deleteUser = async (id: string): Promise<DeleteResult> => {
     return result;
 };
 
+export const deleteBooking = async (
+    id: string
+) => {
+    return deleteMutation(
+        `/api/admin/bookings/${id}`
+    );
+};
+
 // ============================
 // VENDOR — BOOKING STATUS
 // ============================
 
-export const updateBookingStatus = async (id: string, status: BookingStatus) => {
+export const updateVendorBookingStatus = async (id: string, status: BookingStatus) => {
     const result = await serverMutation(
         `/api/vendor/bookings/${id}`,
         "PATCH",
@@ -149,4 +157,17 @@ export const updateBookingStatus = async (id: string, status: BookingStatus) => 
     );
     revalidatePath("/dashboard/vendor/bookings");
     return result;
+};
+
+export const updateAdminBookingStatus = async (
+    id: string,
+    status: string
+) => {
+    return serverMutation(
+        `/api/admin/bookings/${id}`,
+        "PATCH",
+        {
+            status,
+        }
+    );
 };

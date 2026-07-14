@@ -223,3 +223,10 @@ export const fetchProfile = async () => {
         true
     );
 };
+
+export const fetchBookings = async () => {
+    return await serverFetch<Booking[]>(
+        "/api/admin/bookings",
+        true
+    );
+};

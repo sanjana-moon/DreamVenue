@@ -23,6 +23,8 @@ import logo from "@/component/assets/images/Logo.png";
 import logoSmall from "@/component/assets/images/logo-sm.png";
 
 import { authClient, useSession } from "@/lib/auth-client";
+import type { IconType } from "react-icons";
+
 const customerMenu = [
     {
         key: "overview",
@@ -94,18 +96,12 @@ const adminMenu = [
         icon: FaClipboardList,
         href: "/dashboard/admin/bookings",
     },
-    {
-        key: "admins",
-        label: "Admin Panel",
-        icon: FaUserShield,
-        href: "/dashboard/admin/settings",
-    },
 ];
 type MenuItem = {
     key: string;
     label: string;
     href: string;
-    icon: React.ElementType;
+    icon: IconType;
 };
 
 type CompactSidebarProps = {
@@ -239,95 +235,62 @@ const CompactSidebarContent = ({
                                 )}
 
                             </Link>
-
                         );
-
                     })}
-
                 </div>
-
             </div>
 
             {/* BOTTOM */}
-
             <div className="border-t border-[#D4AF37]/20 p-3">
-
                 <Link
                     href="/"
                     className={`flex items-center rounded-2xl transition-all
                     ${expanded ? "gap-3 px-3 py-3" : "justify-center p-3"}
                     hover:bg-white`}
                 >
-
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F0F7F4]">
-
                         <FaHome />
-
                     </div>
-
                     {expanded && "Back to Website"}
-
                 </Link>
-
                 <button
                     onClick={handleLogout}
                     className={`mt-2 flex w-full items-center rounded-2xl transition-all
                     ${expanded ? "gap-3 px-3 py-3" : "justify-center p-3"}
                     hover:bg-red-50 hover:text-red-500`}
                 >
-
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F0F7F4]">
-
                         <FaSignOutAlt />
-
                     </div>
-
                     {expanded && "Logout"}
-
                 </button>
-
                 {expanded && (
-
                     <div className="mt-5 rounded-3xl bg-gradient-to-br from-[#0A2F1D] to-[#1E6B4F] p-5 text-center text-white">
-
                         <h3 className="font-bold text-lg">
                             DreamVenue
                         </h3>
-
                         <p className="mt-1 text-sm text-[#D4AF37]">
                             Book • Celebrate • Create Memories
                         </p>
-
                     </div>
-
                 )}
-
             </div>
-
         </div>
     );
 };
 const DashboardSideBar = () => {
     const { data: session } = useSession();
-
     const pathname = usePathname();
-
     const router = useRouter();
-
     const [compactExpanded, setCompactExpanded] = useState(false);
-
     const role = session?.user?.role;
-
     const handleLogout = async () => {
         try {
             await authClient.signOut();
-
             toast.success("Logged out successfully.");
-
             router.push("/");
         } catch (error) {
             console.error(error);
-
             toast.error("Logout failed.");
         }
     };
@@ -351,18 +314,14 @@ const DashboardSideBar = () => {
         if (dashboardRoots.includes(item.href)) {
             return pathname === item.href;
         }
-
         return pathname === item.href || pathname.startsWith(item.href + "/");
     };
 
     return (
         <>
             {/* MOBILE SPACER */}
-
             <div className="lg:hidden w-20 shrink-0" />
-
             {/* MOBILE SIDEBAR */}
-
             <aside
                 onMouseEnter={() => setCompactExpanded(true)}
                 onMouseLeave={() => setCompactExpanded(false)}
