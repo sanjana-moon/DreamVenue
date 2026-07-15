@@ -90,7 +90,7 @@ export default async function PaymentSuccess({
 
                 {/* Header */}
 
-                <CardHeader className="flex flex-col items-center justify-center gap-5 bg-gradient-to-br from-[#0A2F1D] to-[#174A31] py-12">
+                <CardHeader className="flex flex-col items-center justify-center gap-5 bg-linear-to-br from-[#0A2F1D] to-[#174A31] py-12">
 
                     <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white">
                         <FaCheckCircle
@@ -112,9 +112,7 @@ export default async function PaymentSuccess({
                 </CardHeader>
 
                 <div className="p-8">
-
                     <div className="rounded-3xl border border-[#D4AF37]/20 bg-[#FCFBF8] p-8">
-
                         <h2 className="mb-8 text-2xl font-bold text-[#0A2F1D]">
                             Booking Details
                         </h2>
@@ -122,7 +120,6 @@ export default async function PaymentSuccess({
                         <div className="space-y-6">
 
                             <div className="flex items-center justify-between border-b border-[#D4AF37]/10 pb-4">
-
                                 <div className="flex items-center gap-3">
                                     <FaMapMarkerAlt className="text-[#D4AF37]" />
 
@@ -130,7 +127,6 @@ export default async function PaymentSuccess({
                                         Venue
                                     </span>
                                 </div>
-
                                 <span className="font-semibold text-[#0A2F1D]">
                                     {session.metadata?.venueName}
                                 </span>
@@ -179,21 +175,16 @@ export default async function PaymentSuccess({
                                 </span>
 
                             </div>
-
                             <div className="flex items-center justify-between border-b border-[#D4AF37]/10 pb-4">
-
                                 <span className="text-[#12201B]/60">
                                     Transaction ID
                                 </span>
-
-                                <span className="max-w-[240px] truncate font-semibold text-[#1E6B4F]">
+                                <span className="max-w-60 truncate font-semibold text-[#1E6B4F]">
                                     {transactionId}
                                 </span>
-
                             </div>
 
                             <div className="flex items-center justify-between border-b border-[#D4AF37]/10 pb-4">
-
                                 <span className="text-[#12201B]/60">
                                     Payment Status
                                 </span>
@@ -228,7 +219,6 @@ export default async function PaymentSuccess({
                         >
                             <Button
                                 className="w-full rounded-xl bg-[#0A2F1D] font-semibold text-white hover:bg-[#1E6B4F]"
-                                endContent={<FaArrowRight />}
                             >
                                 View My Bookings
                             </Button>
@@ -239,7 +229,6 @@ export default async function PaymentSuccess({
                             className="w-full sm:w-auto"
                         >
                             <Button
-                                variant="bordered"
                                 className="w-full rounded-xl border-[#D4AF37] text-[#0A2F1D]"
                             >
                                 Browse More Venues
@@ -247,11 +236,8 @@ export default async function PaymentSuccess({
                         </Link>
 
                     </CardFooter>
-
                 </div>
-
             </Card>
-
         </div>
     );
 }

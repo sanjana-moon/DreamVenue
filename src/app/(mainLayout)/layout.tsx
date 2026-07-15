@@ -1,11 +1,21 @@
+import { ReactNode } from "react";
+
 import Footer from "@/component/shared/Footer";
 import Navbar from "@/component/shared/Navbar";
 
-export default function RootLayout({ children }) {
+interface RootLayoutProps {
+    children: ReactNode;
+}
+
+export default function RootLayout({
+    children,
+}: RootLayoutProps) {
     return (
         <div>
             <Navbar />
-            <div className="flex-grow flex flex-col">{children}</div>
+            <div className="grow flex flex-col">
+                {children}
+            </div>
             <Footer />
         </div>
     );

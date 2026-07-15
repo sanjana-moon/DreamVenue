@@ -1,139 +1,102 @@
-import { fetchFeaturedVenues } from "@/lib/api/venues/data";
+"use client";
+
 import Link from "next/link";
-import { FaStar, FaMapMarkerAlt } from "react-icons/fa";
+import {
+    FaHeart,
+    FaBuilding,
+    FaBirthdayCake,
+    FaRing,
+    FaTree,
+    FaMicrophone,
+} from "react-icons/fa";
 
-const FeaturedVenues = async () => {
-    const data = await fetchFeaturedVenues();
-    const venues = data?.venues || [];
-    if (!venues.length) return null;
+const categories = [
+    {
+        title: "Wedding Venues",
+        value: "Wedding",
+        description: "Elegant spaces for your perfect wedding day.",
+        icon: FaHeart,
+    },
+    {
+        title: "Corporate Events",
+        value: "Corporate",
+        description: "Professional venues for meetings and events.",
+        icon: FaBuilding,
+    },
+    {
+        title: "Birthday Parties",
+        value: "Birthday",
+        description: "Celebrate unforgettable birthday moments.",
+        icon: FaBirthdayCake,
+    },
+    {
+        title: "Engagements",
+        value: "Engagement",
+        description: "Beautiful places for your special beginning.",
+        icon: FaRing,
+    },
+    {
+        title: "Outdoor Events",
+        value: "Outdoor",
+        description: "Natural settings for memorable gatherings.",
+        icon: FaTree,
+    },
+    {
+        title: "Conference Halls",
+        value: "Conference",
+        description: "Modern halls for professional occasions.",
+        icon: FaMicrophone,
+    },
+];
 
+const VenueCategories = () => {
     return (
-        <section className="bg-[#F0F7F4] py-20">
+        <section className="bg-white py-20">
             <div className="mx-auto max-w-7xl px-6">
-
                 {/* HEADER */}
                 <div className="mb-12 text-center">
-                    <p className="mb-3 text-sm uppercase tracking-[0.3em] text-[#D4AF37] font-semibold">
-                        Featured Venues
+                    <p className="text-sm uppercase tracking-[0.3em] font-semibold text-[#D4AF37]">
+                        Explore Categories
                     </p>
-                    <h2 className="text-4xl md:text-5xl font-bold text-[#0A2F1D]">
-                        Discover Beautiful Places
-                        <br />
-                        For Your Special Moments
+                    <h2 className="mt-3 text-3xl md:text-5xl font-bold text-[#0A2F1D]">
+                        Find The Perfect Venue
                     </h2>
-                    <p className="mx-auto mt-5 max-w-2xl text-gray-600">
-                        Handpicked venues designed to make weddings,
-                        celebrations, and unforgettable events extraordinary.
+                    <p className="mx-auto mt-4 max-w-2xl text-gray-600">
+                        Choose from our curated venue categories designed for every celebration and occasion.
                     </p>
                 </div>
 
-                {/* CARDS */}
-                <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                    {venues.map((venue) => (
-                        <div
-                            key={venue._id}
-                            className="
-                            group overflow-hidden rounded-3xl 
-                            bg-white shadow-lg
-                            transition-all duration-500
-                            hover:-translate-y-2
-                            hover:shadow-2xl
-                            "
-                        >
-                            {/* IMAGE */}
-
-                            <div className="relative h-72 overflow-hidden">
-                                <img
-                                    src={venue.image}
-                                    alt={venue.name}
-                                    className="
-                                    h-full w-full object-cover
-                                    transition duration-700
-                                    group-hover:scale-110
-                                    "
-                                />
-                                <div
-                                    className="
-                                    absolute inset-0
-                                    bg-gradient-to-t
-                                    from-[#0A2F1D]/80
-                                    via-transparent
-                                    "
-                                />
-                                <div
-                                    className="
-                                    absolute bottom-4 left-4
-                                    rounded-full
-                                    bg-[#D4AF37]
-                                    px-4 py-1
-                                    text-sm font-semibold
-                                    text-[#0A2F1D]
-                                    "
-                                >
-                                    {venue.category}
-                                </div>
-                            </div>
-                            {/* CONTENT */}
-
-                            <div className="p-6">
-                                <h3 className="
-                                text-xl font-bold
-                                text-[#0A2F1D]
-                                ">
-                                    {venue.name}
-                                </h3>
-                                <div className="
-                                mt-3 flex items-center gap-2
-                                text-sm text-gray-600
-                                ">
-                                    <FaMapMarkerAlt className="text-[#D4AF37]" />
-
-                                    {venue.location}
-                                </div>
-                                <div className="
-                                mt-4 flex items-center justify-between
-                                ">
-                                    <div className="
-                                    flex items-center gap-2
-                                    "
-                                    >
-                                        <FaStar className="text-[#D4AF37]" />
-                                        <span className="font-semibold">
-                                            {venue.avgRating || 0}
-                                        </span>
-
-                                        <span className="text-gray-500">
-                                            ({venue.reviewCount})
-                                        </span>
-
+                {/* CATEGORY CARDS */}
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {categories.map((category) => {
+                        const Icon = category.icon;
+                        return (
+                            <Link
+                                key={category.value}
+                                href={`/venues?category=${category.value}`}
+                                className="group rounded-3xl border border-[#D4AF37]/20 bg-[#F0F7F4] p-8 transition-all duration-500 hover:-translate-y-2 hover:bg-[#0A2F1D] hover:shadow-xl"
+                            >
+                                <div className="flex items-center justify-between">
+                                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#D4AF37] text-[#0A2F1D] text-2xl transition group-hover:scale-110">
+                                        <Icon />
                                     </div>
-                                    <p className="
-                                    font-bold text-[#1E6B4F]
-                                    ">
-                                        ৳{venue.pricePerEvent}
-                                    </p>
+                                    <span className="text-[#D4AF37] text-3xl opacity-0 transition group-hover:opacity-100">
+                                        →
+                                    </span>
                                 </div>
-
-                                <Link
-                                    href={`/venues/${venue._id}`}
-                                    className="
-                                    mt-6 block rounded-xl
-                                    bg-[#0A2F1D]
-                                    py-3 text-center
-                                    font-semibold text-white
-                                    transition
-                                    hover:bg-[#1E6B4F]
-                                    "
-                                >
-                                    View Details
-                                </Link>
-                            </div>
-                       </div>
-                    ))}
+                                <h3 className="mt-6 text-2xl font-bold text-[#0A2F1D] group-hover:text-white">
+                                    {category.title}
+                                </h3>
+                                <p className="mt-3 text-gray-600 group-hover:text-gray-200">
+                                    {category.description}
+                                </p>
+                            </Link>
+                        );
+                    })}
                 </div>
             </div>
         </section>
     );
 };
 
-export default FeaturedVenues;
+export default VenueCategories;

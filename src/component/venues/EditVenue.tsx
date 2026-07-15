@@ -200,7 +200,6 @@ const EditVenueModal = ({
                             <Button
                                 type="button"
                                 onPress={() => setIsModalOpen(false)}
-                                variant="bordered"
                                 className="flex-1 border-[#D4AF37] text-[#0A2F1D]"
                             >
                                 Cancel
@@ -208,7 +207,6 @@ const EditVenueModal = ({
 
                             <Button
                                 type="submit"
-                                isLoading={loading}
                                 className="flex-1 bg-[#0A2F1D] text-white"
                             >
                                 {loading ? "Saving..." : "Save Changes"}

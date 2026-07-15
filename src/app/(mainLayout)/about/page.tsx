@@ -57,7 +57,6 @@ export default function AboutSection() {
                     </motion.div>
 
                     {/* Content */}
-
                     <motion.div
                         initial={{
                             opacity: 0,
@@ -100,9 +99,7 @@ export default function AboutSection() {
                         </p>
 
                         <Button
-                            radius="full"
-                            endContent={<FaArrowRight />}
-                            className="mt-10 bg-[#0A2F1D] px-8 py-7 text-white hover:bg-[#14452E]"
+                            className="mt-10 bg-[#0A2F1D] px-8 py-7 text-white hover:bg-[#14452E] rounded-md"
                         >
                             Explore Venues
                         </Button>
@@ -161,23 +158,16 @@ export default function AboutSection() {
                     </div>
 
                     <div className="rounded-3xl border border-[#D4AF37]/20 bg-white p-8 text-center shadow-lg">
-
                         <FaCalendarCheck className="mx-auto mb-5 text-5xl text-[#D4AF37]" />
-
                         <h3 className="text-4xl font-black text-[#0A2F1D]">
                             10K+
                         </h3>
-
                         <p className="mt-2 text-[#12201B]/70">
                             Successful Bookings
                         </p>
-
                     </div>
-
                 </motion.div>
-
             </div>
-
         </section>
     );
 }

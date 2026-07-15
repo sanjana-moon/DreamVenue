@@ -163,7 +163,7 @@ export default function VenueReviewSection({
 
                 <Modal.Backdrop>
                     <Modal.Container>
-                        <Modal.Dialog className="sm:max-w-[550px]">
+                        <Modal.Dialog className="sm:max-w-137">
                             <Modal.CloseTrigger />
                             <Modal.Header>
                                 <Modal.Icon className="bg-[#D4AF37]/15 text-[#0A2F1D]">
@@ -202,7 +202,6 @@ export default function VenueReviewSection({
                                     </div>
 
                                     <TextArea
-                                        label="Your Review"
                                         className="w-full"
                                         placeholder="Tell other guests what you think about this venue..."
                                         value={comment}
@@ -221,7 +220,6 @@ export default function VenueReviewSection({
 
                                 <Button
                                     className="bg-[#0A2F1D] text-white hover:bg-[#1E6B4F] rounded-xl font-semibold"
-                                    isLoading={loading}
                                     onPress={async () => {
                                         await handleSubmit();
                                     }}

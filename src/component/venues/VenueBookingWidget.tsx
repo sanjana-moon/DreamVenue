@@ -118,7 +118,7 @@ export default function VenueBookingWidget({
 
             <Modal.Backdrop>
                 <Modal.Container>
-                    <Modal.Dialog className="sm:max-w-[550px]">
+                    <Modal.Dialog className="sm:max-w-137">
                         <Modal.CloseTrigger />
 
                         <Modal.Header>

@@ -39,6 +39,7 @@ export interface Booking {
     venueName: string;
     customerEmail: string;
     bookingDate: string;
+    guestCount: number;
     totalPrice: number;
     transactionId: string;
     paymentStatus: string;
@@ -101,6 +102,17 @@ export interface Profile {
     profileImage?: string;
 }
 
+export interface CustomerDashboard {
+    upcomingBookings: number;
+    completedEvents: number;
+    totalSpent: number;
+    chartData: {
+        month: string;
+        bookings: number;
+    }[];
+    recentBookings: Booking[];
+}
+
 /* ============================
    CUSTOMER
 ============================ */
@@ -122,6 +134,14 @@ export const fetchCustomerReviews = async (email: string) => {
 export const canReviewVenue = async (venueId: string, email: string) => {
     return await serverFetch<CanReviewResponse>(
         `/api/venues/${venueId}/can-review/${email}`,
+        true
+    );
+};
+
+
+export const fetchCustomerDashboard = async (email: string) => {
+    return serverFetch<CustomerDashboard>(
+        `/api/customer-stats/${email}`,
         true
     );
 };

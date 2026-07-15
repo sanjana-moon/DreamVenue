@@ -2,23 +2,24 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { 
-    FaSpinner, 
-    FaUser, 
-    FaEnvelope, 
-    FaUserTag, 
+import {
+    FaSpinner,
+    FaUser,
+    FaEnvelope,
+    FaUserTag,
     FaRemoveFormat,
     FaEdit,
     FaSave,
     FaTimes,
     FaCamera
 } from "react-icons/fa";
+import { updateProfile } from "@/lib/api/venues/actions";
 
 interface Profile {
     name: string;
     email: string;
     role: string;
-    profileImage?: string;
+    profileImage?: string | null;
 }
 
 interface ProfilePageProps {
@@ -33,23 +34,22 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
     const [error, setError] = useState<string | null>(initialError || null);
     const [imageError, setImageError] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    
-    // Form state for editing
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
     const [editData, setEditData] = useState({
         name: "",
-        email: "",
         profileImage: "",
     });
 
-    // Initialize edit data when profile loads or edit mode opens
     const startEditing = () => {
         if (profile) {
             setEditData({
                 name: profile.name,
-                email: profile.email,
                 profileImage: profile.profileImage || "",
             });
             setIsEditing(true);
+            setError(null);
+            setSuccessMessage(null);
         }
     };
 
@@ -57,17 +57,17 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
         setIsEditing(false);
         setEditData({
             name: "",
-            email: "",
             profileImage: "",
         });
+        setError(null);
+        setSuccessMessage(null);
     };
 
-    // Function to refresh profile data from client
     async function refreshProfile() {
         try {
             setLoading(true);
             setError(null);
-            
+
             const res = await fetch('/api/profile', {
                 credentials: 'include',
                 headers: {
@@ -90,44 +90,40 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
         }
     }
 
-    // Function to update profile
-    async function updateProfile(e: React.FormEvent) {
+    async function handleUpdateProfile(e: React.FormEvent) {
         e.preventDefault();
-        
+
         try {
             setSaving(true);
             setError(null);
+            setSuccessMessage(null);
 
-            const res = await fetch('/api/profile', {
-                method: 'PUT',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(editData),
+            const updatedProfile = await updateProfile({
+                name: editData.name,
+                email: profile?.email || "",
+                profileImage: editData.profileImage || undefined,
             });
 
-            if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(errorData.message || `Failed to update profile: ${res.status}`);
-            }
-
-            const updatedProfile = await res.json();
             setProfile(updatedProfile);
+            setImageError(false);
             setIsEditing(false);
-            
-            // Show success message (optional)
-            // You can add a toast notification here
-            console.log("Profile updated successfully!");
+            setSuccessMessage("Profile updated successfully!");
+
+            setTimeout(() => {
+                setSuccessMessage(null);
+            }, 3000);
         } catch (err) {
-            console.error("Error updating profile:", err);
-            setError(err instanceof Error ? err.message : "Failed to update profile. Please try again.");
+            console.error(err);
+            setError(
+                err instanceof Error
+                    ? err.message
+                    : "Failed to update profile."
+            );
         } finally {
             setSaving(false);
         }
     }
 
-    // Show loading state
     if (loading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[70vh]">
@@ -137,7 +133,6 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
         );
     }
 
-    // Show error state
     if (error) {
         return (
             <div className="max-w-4xl mx-auto p-8">
@@ -159,7 +154,6 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
         );
     }
 
-    // Show not found state
     if (!profile) {
         return (
             <div className="max-w-4xl mx-auto p-8">
@@ -187,7 +181,8 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
         .split(" ")
         .map((word) => word.charAt(0))
         .join("")
-        .toUpperCase();
+        .toUpperCase()
+        .slice(0, 2);
 
     return (
         <div className="max-w-4xl mx-auto p-8">
@@ -195,8 +190,7 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
                 {/* Header */}
                 <div className="bg-[#0A2F1D] text-white p-10 text-center relative">
                     <div className="absolute top-0 left-0 w-full h-1 bg-[#D4AF37]" />
-                    
-                    {/* Profile Picture with Edit Button */}
+
                     <div className="relative inline-">
                         <div className="w-28 h-28 rounded-full mx-auto shadow-lg relative overflow-hidden bg-[#D4AF37] border-4 border-[#D4AF37]">
                             {profile.profileImage && !imageError ? (
@@ -214,11 +208,10 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
                                 </div>
                             )}
                         </div>
-                        
-                        {/* Camera icon for upload (optional) */}
-                        <button 
+
+                        <button
                             className="absolute bottom-0 right-0 bg-[#D4AF37] p-2 rounded-full shadow-lg hover:bg-[#C5A234] transition-colors"
-                            onClick={() => {/* Open image upload dialog */}}
+                            onClick={() => {}}
                             title="Change profile picture"
                         >
                             <FaCamera className="text-[#0A2F1D] text-sm" />
@@ -234,8 +227,7 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
                                 <FaUserTag className="text-[#D4AF37]" />
                                 DreamVenue {profile.role}
                             </p>
-                            
-                            {/* Edit Button */}
+
                             <button
                                 onClick={startEditing}
                                 className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#D4AF37] text-[#0A2F1D] rounded-lg hover:bg-[#C5A234] transition-colors font-semibold"
@@ -248,7 +240,7 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
                         <div className="mt-4">
                             <div className="flex items-center justify-center gap-3">
                                 <button
-                                    onClick={updateProfile}
+                                    onClick={handleUpdateProfile}
                                     disabled={saving}
                                     className="inline-flex items-center gap-2 px-6 py-2 bg-[#D4AF37] text-[#0A2F1D] rounded-lg hover:bg-[#C5A234] transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
@@ -276,6 +268,13 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
                         </div>
                     )}
                 </div>
+
+                {/* Success Message */}
+                {successMessage && (
+                    <div className="mx-8 mt-4 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 text-center">
+                        {successMessage}
+                    </div>
+                )}
 
                 {/* Profile Details */}
                 <div className="p-8 space-y-6">
@@ -320,10 +319,22 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
                                     className="w-full border border-gray-300 rounded-xl px-4 py-3 bg-gray-50 text-[#12201B] capitalize cursor-not-allowed"
                                 />
                             </div>
+
+                            {profile.profileImage && (
+                                <div>
+                                    <label className=" font-semibold text-[#0A2F1D] mb-2 flex items-center gap-2">
+                                        <FaCamera className="text-[#D4AF37]" />
+                                        Profile Image
+                                    </label>
+                                    <div className="w-full border border-gray-300 rounded-xl px-4 py-3 bg-gray-50 text-[#12201B] break-all">
+                                        {profile.profileImage}
+                                    </div>
+                                </div>
+                            )}
                         </>
                     ) : (
                         // Edit Mode
-                        <form onSubmit={updateProfile} className="space-y-6">
+                        <form onSubmit={handleUpdateProfile} className="space-y-6">
                             <div>
                                 <label className=" font-semibold text-[#0A2F1D] mb-2 flex items-center gap-2">
                                     <FaUser className="text-[#D4AF37]" />
@@ -346,12 +357,13 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
                                 </label>
                                 <input
                                     type="email"
-                                    value={editData.email}
-                                    onChange={(e) => setEditData({ ...editData, email: e.target.value })}
-                                    required
-                                    className="w-full border border-[#D4AF37] rounded-xl px-4 py-3 bg-white text-[#12201B] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
-                                    placeholder="Enter your email"
+                                    value={profile.email}
+                                    readOnly
+                                    className="w-full border border-gray-300 rounded-xl px-4 py-3 bg-gray-50 cursor-not-allowed"
                                 />
+                                <p className="text-xs text-[#12201B]/50 mt-1">
+                                    Email cannot be changed.
+                                </p>
                             </div>
 
                             <div>
@@ -368,7 +380,6 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
                                 <p className="text-xs text-[#12201B]/50 mt-1">Role cannot be changed</p>
                             </div>
 
-                            {/* Image URL field (optional) */}
                             <div>
                                 <label className=" font-semibold text-[#0A2F1D] mb-2 flex items-center gap-2">
                                     <FaCamera className="text-[#D4AF37]" />
@@ -381,7 +392,9 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
                                     className="w-full border border-[#D4AF37] rounded-xl px-4 py-3 bg-white text-[#12201B] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
                                     placeholder="https://example.com/your-image.jpg"
                                 />
-                                <p className="text-xs text-[#12201B]/50 mt-1">Enter a URL for your profile picture</p>
+                                <p className="text-xs text-[#12201B]/50 mt-1">
+                                    Enter a URL for your profile picture
+                                </p>
                             </div>
                         </form>
                     )}

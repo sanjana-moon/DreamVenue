@@ -135,7 +135,6 @@ export default function ManageUsersClient({
                                         <td className="px-6 py-5">
                                             <div className="flex justify-center">
                                                 <Button
-                                                    color="danger"
                                                     isIconOnly
                                                     onPress={() =>
                                                         handleDelete(user._id)

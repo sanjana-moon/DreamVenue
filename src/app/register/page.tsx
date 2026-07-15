@@ -266,7 +266,6 @@ const Register = () => {
                     {/* Create Account Button */}
                     <Button
                         type="submit"
-                        isLoading={loading}
                         className="mt-4 w-full rounded-xl bg-[#0A2F1D] py-6 text-base font-semibold text-white transition hover:bg-[#1E6B4F]"
                     >
                         <IoMdCheckmarkCircleOutline className="mr-2 text-xl" />

@@ -26,7 +26,7 @@ const Navbar = () => {
     const [isAuthMenuOpen, setIsAuthMenuOpen] = useState(false);
 
     const { data: session } = authClient.useSession();
-    const user = session?.user;    
+    const user = session?.user;
 
     useEffect(() => {
         setIsMounted(true);
@@ -79,17 +79,22 @@ const Navbar = () => {
             {
                 key: "users",
                 label: "Manage Users",
-                href: "/dashboard/manage-users",
+                href: "/dashboard/admin/users",
             },
             {
                 key: "venues",
                 label: "Manage Venues",
-                href: "/dashboard/manage-venues",
+                href: "/dashboard/admin/manage-venues",
             },
             {
                 key: "bookings",
                 label: "Manage Bookings",
-                href: "/dashboard/manage-bookings",
+                href: "/dashboard/admin/bookings",
+            },
+            {
+                key: "profile",
+                label: "Profile",
+                href: "/dashboard/profile",
             },
         ];
     } else if (role === "vendor") {
@@ -107,12 +112,17 @@ const Navbar = () => {
             {
                 key: "myVenues",
                 label: "My Venues",
-                href: "/dashboard/vendor/my-venues",
+                href: "/dashboard/vendor/my-venue",
             },
             {
                 key: "bookings",
                 label: "Venue Bookings",
-                href: "/dashboard/vendor/vendor-bookings",
+                href: "/dashboard/vendor/bookings",
+            },
+            {
+                key: "profile",
+                label: "Profile",
+                href: "/dashboard/profile",
             },
         ];
     } else {
@@ -125,7 +135,12 @@ const Navbar = () => {
             {
                 key: "bookings",
                 label: "My Bookings",
-                href: "/dashboard/bookings",
+                href: "/dashboard/customer/bookings",
+            },
+            {
+                key: "profile",
+                label: "Profile",
+                href: "/dashboard/customer/profile",
             },
             {
                 key: "profile",
@@ -168,7 +183,7 @@ const Navbar = () => {
                                 Dashboard
                             </button>
 
-                            <div className="absolute left-0 top-full hidden min-w-[220px] rounded-xl border bg-white shadow-xl group-hover:block overflow-hidden">
+                            <div className="absolute left-0 top-full hidden min-w-55 rounded-xl border bg-white shadow-xl group-hover:block overflow-hidden">
                                 {dashboardLinks.map((item) => (
                                     <Link
                                         key={item.key}
@@ -197,9 +212,9 @@ const Navbar = () => {
                                 <Image
                                     src={user.image ?? "/default-avatar.png"}
                                     alt={user.name ?? "User"}
-                                    width={42}
-                                    height={42}
-                                    className="rounded-full border object-cover"
+                                    height={60}
+                                    width={60}
+                                    className="mb-3 rounded-full object-cover"
                                 />
 
                                 <MotionButton
@@ -396,16 +411,16 @@ const Navbar = () => {
                         }}
                         className="absolute right-4 top-20 z-50 lg:hidden"
                     >
-                        <div className="min-w-[240px] rounded-2xl border bg-white p-5 shadow-xl">
+                        <div className="min-w-60 rounded-2xl border bg-white p-5 shadow-xl">
                             {user ? (
                                 <>
                                     <div className="mb-5 flex flex-col items-center border-b pb-4">
                                         <Image
-                                            src={user.image}
-                                            alt={user.name}
+                                            src={user.image ?? "/default-avatar.png"}
+                                            alt={user.name ?? "User"}
                                             height={60}
                                             width={60}
-                                            className="mb-3"
+                                            className="mb-3 rounded-full object-cover"
                                         />
 
                                         <h2 className="text-lg font-semibold">

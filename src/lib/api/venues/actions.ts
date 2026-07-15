@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { deleteMutation, serverMutation } from "../server";
+import { Profile } from "./data";
 
 // ============================
 // TYPES
@@ -169,5 +170,22 @@ export const updateAdminBookingStatus = async (
         {
             status,
         }
+    );
+};
+
+
+export interface UpdateProfileInput {
+    name: string;
+    email: string;
+    profileImage?: string;
+}
+
+export const updateProfile = async (
+    data: UpdateProfileInput
+) => {
+    return serverMutation<Profile, UpdateProfileInput>(
+        "/api/profile",
+        "PUT",
+        data
     );
 };

@@ -142,11 +142,7 @@ export default function VendorBookingsClient({
                                         ">
                                         {booking.venueName}
                                     </h2>
-                                    <div className="
-                                        mt-3
-                                        space-y-2
-                                        text-sm
-                                        text-[#12201B]/70
+                                    <div className="mt-3 space-y-2 text-sm text-[#12201B]/70
                                         ">
                                         <p className="flex items-center gap-2">
                                             <FaCalendarAlt className="text-[#D4AF37]" />

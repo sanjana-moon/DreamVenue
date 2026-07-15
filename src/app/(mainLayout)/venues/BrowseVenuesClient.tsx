@@ -108,7 +108,7 @@ const BrowseVenuesClient = ({
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="relative overflow-hidden bg-gradient-to-r from-[#0A2F1D] via-[#1E6B4F] to-[#0A2F1D] rounded-3xl py-16 px-8 text-center shadow-xl mb-10"
+                    className="relative overflow-hidden bg-linear-to-r from-[#0A2F1D] via-[#1E6B4F] to-[#0A2F1D] rounded-3xl py-16 px-8 text-center shadow-xl mb-10"
                 >
                     {/* Decorative gold accent line */}
                     <div className="absolute top-0 left-0 right-0 h-1 bg-[#D4AF37]" />
@@ -122,26 +122,20 @@ const BrowseVenuesClient = ({
                         birthdays, conferences, corporate events,
                         concerts and unforgettable celebrations.
                     </p>
-
                 </motion.div>
 
                 {/* Filters */}
-
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
                     className="bg-white rounded-3xl shadow-xl border border-[#D4AF37]/30 p-6 mb-8"
                 >
-
                     <div className="grid lg:grid-cols-5 gap-4">
 
                         {/* Search */}
-
                         <div className="flex items-center gap-3 bg-[#F0F7F4] border border-[#D4AF37]/30 rounded-xl px-4 focus-within:border-[#1E6B4F] transition-colors">
-
                             <FaSearch className="text-[#D4AF37]" />
-
                             <input
                                 type="text"
                                 placeholder="Search venues..."
@@ -151,11 +145,9 @@ const BrowseVenuesClient = ({
                                 }
                                 className="w-full py-3 bg-transparent outline-none text-[#12201B] placeholder:text-[#12201B]/40"
                             />
-
                         </div>
 
                         {/* Category */}
-
                         <select
                             value={currentCategory}
                             onChange={(e) =>

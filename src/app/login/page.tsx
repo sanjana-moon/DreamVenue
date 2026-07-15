@@ -200,7 +200,6 @@ const LoginPage = () => {
                         Create an Account
                     </Link>
                 </p>
-
             </Card>
         </div>
     );

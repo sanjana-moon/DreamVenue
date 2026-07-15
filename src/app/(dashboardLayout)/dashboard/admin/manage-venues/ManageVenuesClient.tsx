@@ -74,7 +74,7 @@ const ManageVenuesClient = ({
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50 p-6">
+        <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-amber-50 p-6">
 
             <div className="max-w-7xl mx-auto">
 
@@ -95,7 +95,7 @@ const ManageVenuesClient = ({
                 <Card className="rounded-3xl overflow-hidden shadow-xl border border-emerald-100">
                     <div className="overflow-x-auto">
                         <table className="w-full">
-                            <thead className="bg-gradient-to-r from-emerald-700 to-emerald-600 text-white">
+                            <thead className="bg-linear-to-r from-emerald-700 to-emerald-600 text-white">
 
                                 <tr>
                                     <th className="px-6 py-4 text-left">

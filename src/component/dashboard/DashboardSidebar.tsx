@@ -42,7 +42,7 @@ const customerMenu = [
         key: "profile",
         label: "Profile",
         icon: FaUsers,
-        href: "/dashboard/customer/profile",
+        href: "/dashboard/profile",
     },
 ];
 const vendorMenu = [
@@ -70,6 +70,12 @@ const vendorMenu = [
         icon: FaCalendarCheck,
         href: "/dashboard/vendor/bookings",
     },
+    {
+        key: "profile",
+        label: "Profile",
+        icon: FaUsers,
+        href: "/dashboard/profile",
+    },
 ];
 const adminMenu = [
     {
@@ -95,6 +101,12 @@ const adminMenu = [
         label: "Manage Bookings",
         icon: FaClipboardList,
         href: "/dashboard/admin/bookings",
+    },
+    {
+        key: "profile",
+        label: "Profile",
+        icon: FaUsers,
+        href: "/dashboard/profile",
     },
 ];
 type MenuItem = {
@@ -236,7 +248,7 @@ const CompactSidebarContent = ({
                     {expanded && "Logout"}
                 </button>
                 {expanded && (
-                    <div className="mt-5 rounded-3xl bg-gradient-to-br from-[#0A2F1D] to-[#1E6B4F] p-5 text-center text-white">
+                    <div className="mt-5 rounded-3xl bg-linear-to-br from-[#0A2F1D] to-[#1E6B4F] p-5 text-center text-white">
                         <h3 className="font-bold text-lg">
                             DreamVenue
                         </h3>
@@ -297,7 +309,7 @@ const DashboardSideBar = () => {
                 onMouseEnter={() => setCompactExpanded(true)}
                 onMouseLeave={() => setCompactExpanded(false)}
                 onClick={() => setCompactExpanded((prev) => !prev)}
-                className={`fixed left-0 top-0 z-40 h-screen overflow-hidden border-r border-[#D4AF37]/20 bg-gradient-to-b from-[#F0F7F4] to-white transition-all duration-300 lg:hidden
+                className={`fixed left-0 top-0 z-40 h-screen overflow-hidden border-r border-[#D4AF37]/20 bg-linear-to-b from-[#F0F7F4] to-white transition-all duration-300 lg:hidden
                 ${compactExpanded ? "w-72 shadow-2xl" : "w-20"}`}
             >
                 <CompactSidebarContent
@@ -312,7 +324,7 @@ const DashboardSideBar = () => {
 
             {/* DESKTOP SIDEBAR */}
 
-            <aside className="sticky top-0 hidden h-screen w-72 border-r border-[#D4AF37]/20 bg-gradient-to-b from-[#F0F7F4] to-white lg:block">
+            <aside className="sticky top-0 hidden h-screen w-72 border-r border-[#D4AF37]/20 bg-linear-to-b from-[#F0F7F4] to-white lg:block">
 
                 <CompactSidebarContent
                     session={session}

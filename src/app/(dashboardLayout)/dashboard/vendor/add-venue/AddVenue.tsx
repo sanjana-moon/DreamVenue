@@ -140,7 +140,6 @@ const AddVenuePage = () => {
                                     Venue Name
                                 </label>
                                 <Input
-                                    label="Venue Name"
                                     placeholder="Enter the venue name"
                                     className="w-full"
                                     {...register("name", {
@@ -157,7 +156,6 @@ const AddVenuePage = () => {
                                     Location
                                 </label>
                                 <Input
-                                    label="Location"
                                     placeholder="Enter the venue location"
                                     className="w-full"
                                     {...register("location", {
@@ -180,7 +178,6 @@ const AddVenuePage = () => {
                                 </label>
                                 <Input
                                     type="number"
-                                    label="Price Per Event ($)"
                                     placeholder="Enter the price"
                                     className="w-full"
                                     {...register("pricePerEvent", {
@@ -204,7 +201,6 @@ const AddVenuePage = () => {
                                 </label>
                                 <Input
                                     type="number"
-                                    label="Guest Capacity"
                                     placeholder="Enter maximum guests"
                                     className="w-full"
                                     {...register("capacity", {
@@ -262,7 +258,6 @@ const AddVenuePage = () => {
                                 Description
                             </label>
                             <TextArea
-                                label="Description"
                                 placeholder="Write a short overview about the venue..."
                                 className="w-full"
                                 rows={6}
@@ -281,7 +276,6 @@ const AddVenuePage = () => {
                         {/* Submit */}
                         <Button
                             type="submit"
-                            isLoading={loading}
                             className="w-full bg-[#0A2F1D] text-white font-semibold py-5 sm:py-6 md:py-7 rounded-2xl hover:bg-[#1E6B4F] transition-all text-sm sm:text-base"
                         >
                             {loading ? "Submitting..." : "Submit Venue For Approval"}

@@ -64,19 +64,19 @@ export default async function VenueDetailsPage({
             {/* ================= SECTION TABS NAVIGATION ================= */}
             <div className="max-w-7xl mx-auto px-5 pt-6 flex gap-3 overflow-x-auto border-b border-gray-100 pb-4">
                 <Button className="bg-[#174A31] text-white font-medium px-8 rounded-xl">Details</Button>
-                <Button variant="light" className="text-gray-600 font-medium px-6 rounded-xl">Features</Button>
-                <Button variant="light" className="text-gray-600 font-medium px-6 rounded-xl">Dining Options</Button>
-                <Button variant="light" className="text-gray-600 font-medium px-6 rounded-xl">Location</Button>
+                <Button className="text-gray-600 font-medium px-6 rounded-xl">Features</Button>
+                <Button className="text-gray-600 font-medium px-6 rounded-xl">Dining Options</Button>
+                <Button className="text-gray-600 font-medium px-6 rounded-xl">Location</Button>
             </div>
 
             {/* ================= MAIN CONTENT SPLIT ================= */}
             <div className="max-w-7xl mx-auto px-5 py-8 grid lg:grid-cols-3 gap-10">
-                
+
                 {/* LEFT COLUMN: Gallery & Main Information */}
                 <div className="lg:col-span-2 space-y-6">
-                    
+
                     {/* Image Grid Gallery */}
-                    <div className="grid grid-cols-4 gap-4 h-[300px] md:h-[450px]">
+                    <div className="grid grid-cols-4 gap-4 h-75 md:h-112">
                         <div className="col-span-3 relative rounded-2xl overflow-hidden h-full">
                             <Image
                                 src={venue.image}
@@ -88,7 +88,7 @@ export default async function VenueDetailsPage({
                         </div>
                         <div className="col-span-1 flex flex-col gap-3 h-full">
                             {images.map((img, index) => (
-                                <div key={index} className="relative flex-1 rounded-xl overflow-hidden min-h-[60px]">
+                                <div key={index} className="relative flex-1 rounded-xl overflow-hidden min-h-15">
                                     <Image
                                         src={img}
                                         alt={`Preview ${index + 1}`}
@@ -167,7 +167,7 @@ export default async function VenueDetailsPage({
                 {/* RIGHT COLUMN: Contact & Action Sticky Sidebars */}
                 <div className="space-y-6">
                     <div className="sticky top-6 space-y-6">
-                        
+
                         {/* Contact Card */}
                         <Card className="p-5 border border-gray-100 rounded-2xl bg-white shadow-sm">
                             <h3 className="text-base font-bold text-[#0A2F1D] mb-4">Contact Us</h3>
@@ -184,19 +184,19 @@ export default async function VenueDetailsPage({
                         </Card>
 
                         {/* Booking & Rate Box Card */}
-                        <Card shadow="md" className="border border-gray-100 rounded-3xl overflow-hidden bg-white">
+                        <Card className="border border-gray-100 rounded-3xl overflow-hidden bg-white shadow-md">
                             {/* Inner Header Label */}
                             <div className="p-6 border-b border-gray-50 pb-4">
                                 <h3 className="text-base font-bold text-[#0A2F1D]">Booking Options</h3>
                             </div>
-                            
+
                             {/* Dynamic Native Booking Component Injection */}
                             <div className="p-6 bg-white space-y-4">
                                 <div className="flex items-baseline justify-between mb-2">
                                     <span className="text-sm text-gray-500">Pricing Per Event</span>
                                     <span className="text-2xl font-black text-[#174A31]">${venue.pricePerEvent}</span>
                                 </div>
-                                
+
                                 <VenueBookingWidget
                                     venueId={venue._id}
                                     venueName={venue.name}
@@ -204,10 +204,8 @@ export default async function VenueDetailsPage({
                                 />
                             </div>
                         </Card>
-                        
                     </div>
                 </div>
-
             </div>
         </div>
     );

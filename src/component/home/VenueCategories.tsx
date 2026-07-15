@@ -80,24 +80,14 @@ const VenueCategories = () => {
                 </div>
 
                 {/* CATEGORY CARDS */}
-                <div className="
-                grid gap-6
-                sm:grid-cols-2
-                lg:grid-cols-3
-                ">
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {categories.map((category) => {
                         const Icon = category.icon;
                         return (
                             <Link
                                 key={category.value}
                                 href={`/venues?category=${category.value}`}
-                                className="
-                                group
-                                rounded-3xl
-                                border border-[#D4AF37]/20
-                                bg-[#F0F7F4]
-                                p-8
-                                transition-all
+                                className="group rounded-3xl border border-[#D4AF37]/20 bg-[#F0F7F4] p-8 transition-all
                                 duration-500
                                 hover:-translate-y-2
                                 hover:bg-[#0A2F1D]

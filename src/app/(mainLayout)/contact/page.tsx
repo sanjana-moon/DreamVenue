@@ -95,43 +95,30 @@ export default function ContactSection() {
                                 </div>
 
                                 <div>
-
                                     <h3 className="font-bold text-[#0A2F1D]">
                                         Email
                                     </h3>
-
                                     <p className="text-[#12201B]/70">
                                         support@dreamvenue.com
                                     </p>
-
                                 </div>
-
                             </div>
-
                         </div>
 
                         <div className="rounded-3xl border border-[#D4AF37]/20 bg-[#F8F6F2] p-6 shadow-lg">
-
                             <div className="flex items-center gap-4">
-
                                 <div className="rounded-full bg-[#0A2F1D] p-4 text-white">
                                     <FaPhoneAlt />
                                 </div>
-
                                 <div>
-
                                     <h3 className="font-bold text-[#0A2F1D]">
                                         Phone
                                     </h3>
-
                                     <p className="text-[#12201B]/70">
                                         +880 1234-567890
                                     </p>
-
                                 </div>
-
                             </div>
-
                         </div>
 
                     </motion.div>
@@ -147,57 +134,42 @@ export default function ContactSection() {
                     >
 
                         <div className="rounded-[32px] border border-[#D4AF37]/20 bg-[#F8F6F2] p-10 shadow-xl">
-
                             <div className="grid gap-6 md:grid-cols-2">
-
                                 <Input
-                                    label="Full Name"
                                     placeholder="John Doe"
                                 />
 
                                 <Input
                                     type="email"
-                                    label="Email"
                                     placeholder="john@example.com"
                                 />
-
                             </div>
 
                             <div className="mt-6">
 
                                 <Input
-                                    label="Subject"
                                     placeholder="How can we help you?"
                                 />
 
                             </div>
 
                             <div className="mt-6">
-
                                 <TextArea
                                 className='w-full'
-                                    label="Message"
                                     placeholder="Write your message..."
                                     rows={6}
                                 />
-
                             </div>
 
                             <Button
-                                endContent={<FaPaperPlane />}
                                 className="mt-8 bg-[#0A2F1D] px-8 text-white hover:bg-[#14452E]"
                             >
                                 Send Message
                             </Button>
-
                         </div>
-
                     </motion.div>
-
                 </div>
-
             </div>
-
         </section>
     );
 }

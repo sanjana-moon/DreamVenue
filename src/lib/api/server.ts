@@ -56,6 +56,7 @@ export const serverFetch = async <TResponse = unknown>(
 
     if (isProtected) {
         const token = await getToken();
+         console.log('Token being sent:', token ? 'Yes' : 'No');
 
         options.headers = {
             Authorization: `Bearer ${token}`,
@@ -63,6 +64,7 @@ export const serverFetch = async <TResponse = unknown>(
     }
 
     const res = await fetch(`${baseURL}${path}`, options);
+    console.log('Response status:', res.status);
 
     return res.json() as Promise<TResponse>;
 };

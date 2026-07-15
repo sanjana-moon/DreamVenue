@@ -41,7 +41,7 @@ export default function NotFound() {
           transition={{ delay: 0.4 }}
           className="text-3xl md:text-4xl font-bold text-[#0A2F1D] mb-4"
         >
-          Venue Not Found
+          Page Not Found
         </motion.h1>
 
         <motion.p
@@ -50,7 +50,7 @@ export default function NotFound() {
           transition={{ delay: 0.5 }}
           className="text-[#12201B]/70 text-lg mb-8"
         >
-          Looks like this venue is already booked or doesn't exist. 
+          Looks like this Page is already booked or doesn't exist. 
           Let's find you the perfect space instead!
         </motion.p>
 
