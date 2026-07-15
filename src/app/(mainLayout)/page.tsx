@@ -4,7 +4,6 @@ import Newsletter from "@/component/home/NewsLetter";
 import VenueCategories from "@/component/home/VenueCategories";
 import WhyChooseUs from "@/component/home/WhyChoose";
 import { fetchFeaturedVenues } from "@/lib/api/venues/data";
-import { Button } from "@heroui/react";
 
 export default async function HomePage() {
   const featured = await fetchFeaturedVenues();
@@ -12,8 +11,8 @@ export default async function HomePage() {
   return (
     <div className="">
       <HeroBanner />
-      <VenueCategories />
       <FeaturedVenues featured={featured} />
+      <VenueCategories />
       <WhyChooseUs />
       <Newsletter />
     </div>

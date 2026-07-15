@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@heroui/react";
-import { FaArrowRight, FaStar } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 
 import VenueCard from "@/component/venues/VenueCard";
 import type { VenueListResponse } from "@/lib/api/venues/data";
@@ -62,9 +62,7 @@ const FeaturedVenues = ({
                     <div className="mt-16 flex justify-center">
                         <Link href="/venues">
                             <Button
-                                radius="full"
                                 size="lg"
-                                endContent={<FaArrowRight />}
                                 className="bg-[#0A2F1D] px-8 text-white hover:bg-[#1E6B4F]"
                             >
                                 Browse All Venues

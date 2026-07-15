@@ -224,7 +224,6 @@ const EditVenueModal = ({
                             <Button
                                 type="submit"
                                 className="flex-1 bg-[#0A2F1D] text-white"
-                                disabled={loading}
                             >
                                 {loading ? "Saving..." : "Save Changes"}
                             </Button>
