@@ -8,8 +8,9 @@ import { FaEdit, FaTrash, FaBuilding } from "react-icons/fa";
 import {
     deleteVenue,
     ApprovalStatus,
-} from "@/lib/api/venues/actions"; 
+} from "@/lib/api/venues/actions";
 import EditVenueModal from "@/component/venues/EditVenue";
+import DeleteVenueModal from "@/component/venues/DeleteVenue";
 
 interface Venue {
     _id: string;
@@ -17,10 +18,10 @@ interface Venue {
     category: string;
     pricePerEvent: number;
     approvalStatus: ApprovalStatus;
-    location?: string;   
-    capacity?: number;   
+    location?: string;
+    capacity?: number;
     description?: string;
-    image?: string;        
+    image?: string;
 }
 
 interface ManageInventoryPageProps {
@@ -37,14 +38,8 @@ const ManageInventoryPage = ({ venues: initialVenues }: ManageInventoryPageProps
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [editingVenue, setEditingVenue] = useState<Venue | null>(null);
 
-    const handleDeleteVenue = async (id: string): Promise<void> => {
-        try {
-            setVenues((prev) => prev.filter((v) => v._id !== id));
-            await deleteVenue(id);
-        } catch (err) {
-            console.error("Failed to delete venue resource:", err);
-            router.refresh();
-        }
+    const onDeleteSuccess = (id: string) => {
+        setVenues((prev) => prev.filter((venue) => venue._id !== id));
     };
 
     return (
@@ -112,6 +107,7 @@ const ManageInventoryPage = ({ venues: initialVenues }: ManageInventoryPageProps
                                                         <Button
                                                             isIconOnly
                                                             size="sm"
+                                                            type="button"
                                                             className="bg-[#0A2F1D] text-white hover:bg-[#1E6B4F] transition-all"
                                                             onPress={() => { setEditingVenue(venue); setIsModalOpen(true); }}
                                                             aria-label="Edit venue"
@@ -121,8 +117,12 @@ const ManageInventoryPage = ({ venues: initialVenues }: ManageInventoryPageProps
                                                         <Button
                                                             isIconOnly
                                                             size="sm"
+                                                            type="button"
                                                             className="bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition-all"
-                                                            onPress={() => handleDeleteVenue(venue._id)}
+                                                            onPress={() => {
+                                                                setDeletedId(venue._id);
+                                                                setIsDeleteOpen(true);
+                                                            }}
                                                             aria-label="Delete venue"
                                                         >
                                                             <FaTrash size={13} />
@@ -158,6 +158,7 @@ const ManageInventoryPage = ({ venues: initialVenues }: ManageInventoryPageProps
                                         <div className="flex gap-2 pt-2 border-t border-[#0A2F1D]/5 justify-end">
                                             <Button
                                                 size="sm"
+                                                type="button"
                                                 className="bg-[#0A2F1D] text-white hover:bg-[#1E6B4F] flex-1 font-semibold"
                                                 onPress={() => { setEditingVenue(venue); setIsModalOpen(true); }}
                                             >
@@ -165,8 +166,12 @@ const ManageInventoryPage = ({ venues: initialVenues }: ManageInventoryPageProps
                                             </Button>
                                             <Button
                                                 size="sm"
+                                                type="button"
                                                 className="bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 flex-1 font-semibold"
-                                                onPress={() => handleDeleteVenue(venue._id)}
+                                                onPress={() => {
+                                                    setDeletedId(venue._id);
+                                                    setIsDeleteOpen(true);
+                                                }}
                                             >
                                                 <FaTrash className="mr-1" /> Delete
                                             </Button>
@@ -185,6 +190,15 @@ const ManageInventoryPage = ({ venues: initialVenues }: ManageInventoryPageProps
                 setIsModalOpen={setIsModalOpen}
                 editingVenue={editingVenue}
                 setEditingVenue={setEditingVenue}
+            />
+            
+            {/* Render Delete Modal Component */}
+            <DeleteVenueModal
+                isDeleteOpen={isDeleteOpen}
+                setIsDeleteOpen={setIsDeleteOpen}
+                deletedId={deletedId}
+                setDeletedId={setDeletedId}
+                onDeleteSuccess={onDeleteSuccess}
             />
         </div>
     );

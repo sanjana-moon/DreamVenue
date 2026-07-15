@@ -140,14 +140,10 @@ const CompactSidebarContent = ({
             </div>
 
             {/* PROFILE CARD */}
-
             <div className="px-3 py-5">
-
                 <div className={`rounded-3xl bg-white shadow-lg border border-[#D4AF37]/20 transition-all duration-300
                     ${expanded ? "p-4" : "p-2"}`}>
-
                     <div className={`flex items-center ${expanded ? "gap-3" : "justify-center"}`}>
-
                         <Image
                             src={
                                 session?.user?.image ??
@@ -158,64 +154,43 @@ const CompactSidebarContent = ({
                             height={54}
                             className="rounded-full border-2 border-[#D4AF37] object-cover"
                         />
-
                         {expanded && (
-
                             <div className="overflow-hidden">
-
                                 <h3 className="truncate text-base font-bold text-[#0A2F1D]">
                                     {session?.user?.name}
                                 </h3>
-
                                 <p className="text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">
                                     {role}
                                 </p>
-
                             </div>
-
                         )}
-
                     </div>
-
                 </div>
-
             </div>
 
             {/* MENU */}
-
             <div className="flex-1 overflow-y-auto px-3">
-
                 {expanded && (
-
                     <p className="mb-4 px-2 text-xs uppercase tracking-[0.25em] text-[#1E6B4F] font-semibold">
                         Dashboard
                     </p>
-
                 )}
-
                 <div className="space-y-2">
-
                     {menuItems.map((item) => {
-
                         const Icon = item.icon;
-
                         const active = isActiveRoute(item);
-
                         return (
-
                             <Link
                                 key={item.key}
                                 href={item.href}
                                 title={item.label}
                                 className={`group flex items-center rounded-2xl transition-all duration-300
                                 ${expanded ? "gap-3 px-3 py-3" : "justify-center p-3"}
-
                                 ${active
                                         ? "bg-[#0A2F1D] text-white shadow-lg"
                                         : "text-[#0A2F1D] hover:bg-white hover:shadow-md"
                                     }`}
                             >
-
                                 <div
                                     className={`flex h-10 w-10 items-center justify-center rounded-xl
                                     ${active
@@ -223,17 +198,13 @@ const CompactSidebarContent = ({
                                             : "bg-[#F0F7F4] group-hover:bg-[#D4AF37] group-hover:text-[#0A2F1D]"
                                         }`}
                                 >
-
                                     <Icon size={18} />
-
                                 </div>
-
                                 {expanded && (
                                     <span className="font-medium whitespace-nowrap">
                                         {item.label}
                                     </span>
                                 )}
-
                             </Link>
                         );
                     })}
@@ -246,7 +217,7 @@ const CompactSidebarContent = ({
                     href="/"
                     className={`flex items-center rounded-2xl transition-all
                     ${expanded ? "gap-3 px-3 py-3" : "justify-center p-3"}
-                    hover:bg-white`}
+                    hover:bg-[#F0F7F4]`}
                 >
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F0F7F4]">
                         <FaHome />
