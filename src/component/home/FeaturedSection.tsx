@@ -1,102 +1,80 @@
-"use client";
-
 import Link from "next/link";
-import {
-    FaHeart,
-    FaBuilding,
-    FaBirthdayCake,
-    FaRing,
-    FaTree,
-    FaMicrophone,
-} from "react-icons/fa";
+import { Button } from "@heroui/react";
+import { FaArrowRight, FaStar } from "react-icons/fa";
 
-const categories = [
-    {
-        title: "Wedding Venues",
-        value: "Wedding",
-        description: "Elegant spaces for your perfect wedding day.",
-        icon: FaHeart,
-    },
-    {
-        title: "Corporate Events",
-        value: "Corporate",
-        description: "Professional venues for meetings and events.",
-        icon: FaBuilding,
-    },
-    {
-        title: "Birthday Parties",
-        value: "Birthday",
-        description: "Celebrate unforgettable birthday moments.",
-        icon: FaBirthdayCake,
-    },
-    {
-        title: "Engagements",
-        value: "Engagement",
-        description: "Beautiful places for your special beginning.",
-        icon: FaRing,
-    },
-    {
-        title: "Outdoor Events",
-        value: "Outdoor",
-        description: "Natural settings for memorable gatherings.",
-        icon: FaTree,
-    },
-    {
-        title: "Conference Halls",
-        value: "Conference",
-        description: "Modern halls for professional occasions.",
-        icon: FaMicrophone,
-    },
-];
+import VenueCard from "@/component/venues/VenueCard";
+import type { VenueListResponse } from "@/lib/api/venues/data";
 
-const VenueCategories = () => {
+interface FeaturedVenuesProps {
+    featured: VenueListResponse;
+}
+
+const FeaturedVenues = ({
+    featured,
+}: FeaturedVenuesProps) => {
     return (
-        <section className="bg-white py-20">
-            <div className="mx-auto max-w-7xl px-6">
-                {/* HEADER */}
-                <div className="mb-12 text-center">
-                    <p className="text-sm uppercase tracking-[0.3em] font-semibold text-[#D4AF37]">
-                        Explore Categories
-                    </p>
-                    <h2 className="mt-3 text-3xl md:text-5xl font-bold text-[#0A2F1D]">
-                        Find The Perfect Venue
+        <section className="bg-[#F0F7F4] py-24">
+            <div className="container mx-auto px-4">
+
+                {/* Heading */}
+                <div className="mx-auto max-w-3xl text-center">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-5 py-2 text-sm font-semibold text-[#D4AF37]">
+                        <FaStar />
+                        Featured Venues
+                    </div>
+
+                    <h2 className="mt-6 text-4xl font-bold text-[#0A2F1D] md:text-5xl">
+                        Discover Our Finest Venues
                     </h2>
-                    <p className="mx-auto mt-4 max-w-2xl text-gray-600">
-                        Choose from our curated venue categories designed for every celebration and occasion.
+
+                    <p className="mt-6 text-lg leading-8 text-[#12201B]/70">
+                        Handpicked premium venues for weddings,
+                        birthdays, corporate events, conferences,
+                        concerts, and unforgettable celebrations.
                     </p>
                 </div>
 
-                {/* CATEGORY CARDS */}
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {categories.map((category) => {
-                        const Icon = category.icon;
-                        return (
-                            <Link
-                                key={category.value}
-                                href={`/venues?category=${category.value}`}
-                                className="group rounded-3xl border border-[#D4AF37]/20 bg-[#F0F7F4] p-8 transition-all duration-500 hover:-translate-y-2 hover:bg-[#0A2F1D] hover:shadow-xl"
-                            >
-                                <div className="flex items-center justify-between">
-                                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#D4AF37] text-[#0A2F1D] text-2xl transition group-hover:scale-110">
-                                        <Icon />
-                                    </div>
-                                    <span className="text-[#D4AF37] text-3xl opacity-0 transition group-hover:opacity-100">
-                                        →
-                                    </span>
-                                </div>
-                                <h3 className="mt-6 text-2xl font-bold text-[#0A2F1D] group-hover:text-white">
-                                    {category.title}
-                                </h3>
-                                <p className="mt-3 text-gray-600 group-hover:text-gray-200">
-                                    {category.description}
-                                </p>
-                            </Link>
-                        );
-                    })}
+                {/* Cards */}
+                <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+                    {featured.venues.map((venue) => (
+                        <VenueCard
+                            key={venue._id}
+                            venue={venue}
+                        />
+                    ))}
                 </div>
+
+                {/* Empty */}
+                {featured.venues.length === 0 && (
+                    <div className="mt-16 rounded-3xl border border-dashed border-[#D4AF37]/30 bg-white py-16 text-center">
+                        <h3 className="text-2xl font-bold text-[#0A2F1D]">
+                            No Featured Venues Found
+                        </h3>
+
+                        <p className="mt-3 text-[#12201B]/70">
+                            Please check back later.
+                        </p>
+                    </div>
+                )}
+
+                {/* Button */}
+                {featured.venues.length > 0 && (
+                    <div className="mt-16 flex justify-center">
+                        <Link href="/venues">
+                            <Button
+                                radius="full"
+                                size="lg"
+                                endContent={<FaArrowRight />}
+                                className="bg-[#0A2F1D] px-8 text-white hover:bg-[#1E6B4F]"
+                            >
+                                Browse All Venues
+                            </Button>
+                        </Link>
+                    </div>
+                )}
             </div>
         </section>
     );
 };
 
-export default VenueCategories;
+export default FeaturedVenues;

@@ -31,25 +31,36 @@ const EditVenueModal = ({
         register,
         handleSubmit,
         formState: { errors },
-        reset
+        reset,
+        setValue,
     } = useForm();
 
+    // Reset form when editingVenue changes
     useEffect(() => {
-        if (editingVenue) {
+        if (editingVenue && isModalOpen) {
+            console.log('=== EDIT VENUE MODAL ===');
+            console.log('Editing Venue:', editingVenue);
+            console.log('Venue ID:', editingVenue._id);
+            console.log('Vendor Email:', editingVenue.vendorEmail);
+            
             reset({
-                name: editingVenue.name,
-                location: editingVenue.location,
-                category: editingVenue.category,
-                pricePerEvent: editingVenue.pricePerEvent,
-                capacity: editingVenue.capacity,
-                description: editingVenue.description,
+                name: editingVenue.name || "",
+                location: editingVenue.location || "",
+                category: editingVenue.category || "",
+                pricePerEvent: editingVenue.pricePerEvent || "",
+                capacity: editingVenue.capacity || "",
+                description: editingVenue.description || "",
             });
         }
-    }, [editingVenue, reset]);
+    }, [editingVenue, isModalOpen, reset]);
 
     const onSubmit = async (data: any) => {
         try {
             setLoading(true);
+            
+            console.log('=== SUBMITTING EDIT ===');
+            console.log('Venue ID:', editingVenue._id);
+            console.log('Form Data:', data);
 
             const updateData = {
                 ...data,
@@ -63,21 +74,27 @@ const EditVenueModal = ({
                 updateData.image = editingVenue.image;
             }
 
-            const result = await updateVenue(updateData, editingVenue._id);
+            console.log('Update Data:', updateData);
 
-            if (result.modifiedCount) {
+            const result = await updateVenue(updateData, editingVenue._id);
+            console.log('Result:', result);
+
+            if (result.modifiedCount > 0) {
                 toast.success("Venue updated successfully");
                 setIsModalOpen(false);
                 setTimeout(() => {
                     window.location.reload();
                 }, 500);
+            } else {
+                toast.warning("No changes were made");
+                setLoading(false);
             }
-        } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong");
+        } catch (error: any) {
+            console.error('Update error:', error);
+            toast.error(error?.message || "Something went wrong");
+            setLoading(false);
         } finally {
             setEditingVenue(null);
-            setLoading(false);
         }
     };
 
@@ -95,13 +112,15 @@ const EditVenueModal = ({
 
                 <Card className="p-5 md:p-7">
                     <div className="bg-[#F0F7F4] border border-[#D4AF37]/20 rounded-2xl p-4 mb-6">
-                        <Image
-                            src={editingVenue?.image}
-                            alt={editingVenue?.name}
-                            width={250}
-                            height={180}
-                            className="rounded-xl object-cover mx-auto"
-                        />
+                        {editingVenue?.image && (
+                            <Image
+                                src={editingVenue.image}
+                                alt={editingVenue.name}
+                                width={250}
+                                height={180}
+                                className="rounded-xl object-cover mx-auto"
+                            />
+                        )}
                     </div>
 
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -120,7 +139,6 @@ const EditVenueModal = ({
                             <div>
                                 <label className="block mb-2 font-semibold text-[#0A2F1D]">Venue Name</label>
                                 <Input
-                                    defaultValue={editingVenue?.name}
                                     {...register("name", { required: "Venue name is required" })}
                                 />
                                 {errors.name && (
@@ -133,7 +151,6 @@ const EditVenueModal = ({
                             <div>
                                 <label className="block mb-2 font-semibold text-[#0A2F1D]">Location</label>
                                 <Input
-                                    defaultValue={editingVenue?.location}
                                     {...register("location", { required: "Location is required" })}
                                 />
                                 {errors.location && (
@@ -149,7 +166,6 @@ const EditVenueModal = ({
                                 <label className="block mb-2 font-semibold text-[#0A2F1D]">Price Per Event</label>
                                 <Input
                                     type="number"
-                                    defaultValue={editingVenue?.pricePerEvent}
                                     {...register("pricePerEvent", {
                                         required: "Price is required",
                                         valueAsNumber: true
@@ -161,7 +177,6 @@ const EditVenueModal = ({
                                 <label className="block mb-2 font-semibold text-[#0A2F1D]">Capacity</label>
                                 <Input
                                     type="number"
-                                    defaultValue={editingVenue?.capacity}
                                     {...register("capacity", {
                                         required: "Capacity is required",
                                         valueAsNumber: true
@@ -173,7 +188,6 @@ const EditVenueModal = ({
                         <div>
                             <label className="block mb-2 font-semibold text-[#0A2F1D]">Category</label>
                             <select
-                                defaultValue={editingVenue?.category}
                                 {...register("category", { required: "Category required" })}
                                 className="w-full px-4 py-3 rounded-xl border border-[#D4AF37]/30 outline-none"
                             >
@@ -189,7 +203,6 @@ const EditVenueModal = ({
                         <div>
                             <label className="block mb-2 font-semibold text-[#0A2F1D]">Description</label>
                             <TextArea
-                                defaultValue={editingVenue?.description}
                                 className="w-full"
                                 rows={5}
                                 {...register("description", { required: "Description required" })}
@@ -199,7 +212,10 @@ const EditVenueModal = ({
                         <div className="flex gap-3">
                             <Button
                                 type="button"
-                                onPress={() => setIsModalOpen(false)}
+                                onPress={() => {
+                                    setIsModalOpen(false);
+                                    setEditingVenue(null);
+                                }}
                                 className="flex-1 border-[#D4AF37] text-[#0A2F1D]"
                             >
                                 Cancel
@@ -208,6 +224,7 @@ const EditVenueModal = ({
                             <Button
                                 type="submit"
                                 className="flex-1 bg-[#0A2F1D] text-white"
+                                disabled={loading}
                             >
                                 {loading ? "Saving..." : "Save Changes"}
                             </Button>

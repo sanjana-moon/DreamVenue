@@ -28,7 +28,7 @@ interface ManageInventoryPageProps {
     venues: Venue[];
 }
 
-const ManageInventoryPage = ({ venues: initialVenues }: ManageInventoryPageProps) => {
+const ManageVenuePage = ({ venues: initialVenues }: ManageInventoryPageProps) => {
     const [venues, setVenues] = useState<Venue[]>(initialVenues || []);
     const router = useRouter();
 
@@ -186,12 +186,13 @@ const ManageInventoryPage = ({ venues: initialVenues }: ManageInventoryPageProps
 
             {/* Render Edit Modal Component */}
             <EditVenueModal
+                key={editingVenue?._id || 'edit-modal'} // Add this key
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
                 editingVenue={editingVenue}
                 setEditingVenue={setEditingVenue}
             />
-            
+
             {/* Render Delete Modal Component */}
             <DeleteVenueModal
                 isDeleteOpen={isDeleteOpen}
@@ -204,4 +205,4 @@ const ManageInventoryPage = ({ venues: initialVenues }: ManageInventoryPageProps
     );
 };
 
-export default ManageInventoryPage;
+export default ManageVenuePage;

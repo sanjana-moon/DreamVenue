@@ -63,11 +63,18 @@ export const updateVenue = async (
     data: Partial<VenueInput>,
     id: string
 ): Promise<UpdateResult> => {
-    return serverMutation<UpdateResult, Partial<VenueInput>>(
+    const result = await serverMutation<
+        UpdateResult,
+        Partial<VenueInput>
+    >(
         `/api/venues/${id}`,
         "PATCH",
         data
     );
+
+    revalidatePath("/dashboard/vendor/my-venues");
+
+    return result;
 };
 
 export const deleteVenue = async (id: string): Promise<DeleteResult> => {

@@ -9,6 +9,15 @@ const getToken = async (): Promise<string | null> => {
         headers: await headers(),
     });
 
+    console.log("\n========== GET TOKEN ==========");
+    console.log("Token Exists:", !!token);
+
+    if (token) {
+        console.log("Preview:", token.substring(0, 40) + "...");
+    }
+
+    console.log("===============================\n");
+
     return token;
 };
 
@@ -18,7 +27,6 @@ export const serverMutation = async <TResponse = unknown, TBody = unknown>(
     data: TBody
 ): Promise<TResponse> => {
     const token = await getToken();
-
     const res = await fetch(`${baseURL}${path}`, {
         method,
         headers: {
@@ -27,6 +35,8 @@ export const serverMutation = async <TResponse = unknown, TBody = unknown>(
         },
         body: JSON.stringify(data),
     });
+
+    console.log("Response:", res.status);
 
     return res.json() as Promise<TResponse>;
 };
@@ -43,6 +53,8 @@ export const deleteMutation = async <TResponse = unknown>(
         },
     });
 
+    console.log("Response:", res.status);
+
     return res.json() as Promise<TResponse>;
 };
 
@@ -56,15 +68,14 @@ export const serverFetch = async <TResponse = unknown>(
 
     if (isProtected) {
         const token = await getToken();
-         console.log('Token being sent:', token ? 'Yes' : 'No');
+
+        console.log("Token Exists:", !!token);
 
         options.headers = {
             Authorization: `Bearer ${token}`,
         };
     }
-
     const res = await fetch(`${baseURL}${path}`, options);
-    console.log('Response status:', res.status);
 
     return res.json() as Promise<TResponse>;
 };
