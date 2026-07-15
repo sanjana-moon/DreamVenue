@@ -6,7 +6,7 @@ import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 import {
-    deleteVenue,
+    deleteAdminVenue,
     updateVenueApprovalStatus,
 } from "@/lib/api/venues/actions";
 
@@ -60,13 +60,17 @@ const ManageVenuesClient = ({
 
     const handleDelete = async (id: string) => {
         try {
-            await deleteVenue(id);
+            const result = await deleteAdminVenue(id);
 
-            setVenues((prev) =>
-                prev.filter((venue) => venue._id !== id)
-            );
+            if (result.deletedCount > 0) {
+                setVenues((prev) =>
+                    prev.filter((venue) => venue._id !== id)
+                );
 
-            toast.success("Venue deleted successfully.");
+                toast.success("Venue deleted successfully.");
+            } else {
+                toast.error("Venue not found.");
+            }
         } catch (error) {
             console.error(error);
             toast.error("Failed to delete venue.");
@@ -75,28 +79,23 @@ const ManageVenuesClient = ({
 
     return (
         <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-amber-50 p-6">
-
             <div className="max-w-7xl mx-auto">
 
                 {/* Header */}
-
                 <div className="mb-8">
                     <h1 className="text-4xl font-bold text-emerald-900">
                         Manage Venues
                     </h1>
-
                     <p className="text-slate-600 mt-2">
                         Review venue submissions, approve or reject listings, and remove unwanted venues.
                     </p>
                 </div>
 
                 {/* Table */}
-
                 <Card className="rounded-3xl overflow-hidden shadow-xl border border-emerald-100">
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead className="bg-linear-to-r from-emerald-700 to-emerald-600 text-white">
-
                                 <tr>
                                     <th className="px-6 py-4 text-left">
                                         Venue
@@ -120,20 +119,16 @@ const ManageVenuesClient = ({
                             </thead>
                             <tbody>
                                 {venues.map((venue) => (
-
                                     <tr
                                         key={venue._id}
                                         className="border-b border-slate-100 hover:bg-emerald-50 transition-colors duration-200"
                                     >
-
                                         <td className="px-6 py-5">
                                             <div>
                                                 <h3 className="font-semibold text-emerald-900">
                                                     {venue.name}
                                                 </h3>
-
                                                 <div className="flex gap-2 mt-2">
-
                                                     <span
                                                         className={`text-[11px] px-2 py-1 rounded-full font-medium ${venue.approvalStatus ===
                                                             "approved"

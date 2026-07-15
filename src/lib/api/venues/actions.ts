@@ -43,6 +43,7 @@ export interface InsertResult {
 
 export interface UpdateResult {
     acknowledged: boolean;
+    matchedCount: number;
     modifiedCount: number;
 }
 
@@ -147,10 +148,14 @@ export const deleteUser = async (id: string): Promise<DeleteResult> => {
 
 export const deleteBooking = async (
     id: string
-) => {
-    return deleteMutation(
+): Promise<DeleteResult> => {
+    const result = await deleteMutation<DeleteResult>(
         `/api/admin/bookings/${id}`
     );
+
+    revalidatePath("/dashboard/admin/manage-bookings");
+
+    return result;
 };
 
 // ============================
@@ -195,4 +200,16 @@ export const updateProfile = async (
         "PUT",
         data
     );
+};
+
+export const deleteAdminVenue = async (
+    id: string
+): Promise<DeleteResult> => {
+    const result = await deleteMutation<DeleteResult>(
+        `/api/admin/venues/${id}`
+    );
+
+    revalidatePath("/dashboard/admin/manage-venues");
+
+    return result;
 };

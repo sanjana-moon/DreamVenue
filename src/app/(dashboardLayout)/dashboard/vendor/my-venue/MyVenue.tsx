@@ -9,8 +9,9 @@ import {
     deleteVenue,
     ApprovalStatus,
 } from "@/lib/api/venues/actions";
-import EditVenueModal from "@/component/venues/EditVenue";
+// import EditVenueModal from "@/component/venues/EditVenue";
 import DeleteVenueModal from "@/component/venues/DeleteVenue";
+import EditVenueModal from "@/component/venues/EditVenue";
 
 interface Venue {
     _id: string;

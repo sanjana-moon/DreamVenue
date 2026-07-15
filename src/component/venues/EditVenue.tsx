@@ -1,22 +1,53 @@
 "use client";
 
-import { updateVenue } from "@/lib/api/venues/actions";
+import { updateVenue, ApprovalStatus } from "@/lib/api/venues/actions";
 import { uploadImage } from "@/component/utils/uploadImage";
 import { Button, Input, Card, TextArea } from "@heroui/react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
+interface Venue {
+    _id: string;
+    name: string;
+    category: string;
+    pricePerEvent: number;
+    approvalStatus: ApprovalStatus;
+    location?: string;
+    capacity?: number;
+    description?: string;
+    image?: string;
+}
+
+interface EditVenueModalProps {
+    isModalOpen: boolean;
+    setIsModalOpen: (isOpen: boolean) => void;
+    editingVenue: Venue | null;
+    setEditingVenue: (venue: Venue | null) => void;
+}
+
+interface FormInputs {
+    name: string;
+    location: string;
+    capacity: number;
+    pricePerEvent: number;
+    category: string;
+    description: string;
+    image?: FileList;
+}
+
 const CATEGORIES = [
     "Wedding",
-    "Conference",
-    "Birthday",
     "Corporate",
+    "Birthday",
+    "Conference",
     "Concert",
-    "Banquet",
+    "Banquet Hall",
     "Outdoor",
-    "Party",
+    "Rooftop",
+    "Community Hall",
+    "Other",
 ];
 
 const EditVenueModal = ({
@@ -24,77 +55,61 @@ const EditVenueModal = ({
     setIsModalOpen,
     editingVenue,
     setEditingVenue,
-}: any) => {
-    const [loading, setLoading] = useState(false);
+}: EditVenueModalProps) => {
+    const [loading, setLoading] = useState<boolean>(false);
 
     const {
         register,
         handleSubmit,
         formState: { errors },
-        reset,
-        setValue,
-    } = useForm();
+        reset
+    } = useForm<FormInputs>();
 
-    // Reset form when editingVenue changes
     useEffect(() => {
-        if (editingVenue && isModalOpen) {
-            console.log('=== EDIT VENUE MODAL ===');
-            console.log('Editing Venue:', editingVenue);
-            console.log('Venue ID:', editingVenue._id);
-            console.log('Vendor Email:', editingVenue.vendorEmail);
-            
+        if (editingVenue) {
             reset({
-                name: editingVenue.name || "",
+                name: editingVenue.name,
                 location: editingVenue.location || "",
-                category: editingVenue.category || "",
-                pricePerEvent: editingVenue.pricePerEvent || "",
-                capacity: editingVenue.capacity || "",
+                capacity: editingVenue.capacity || 0,
+                pricePerEvent: editingVenue.pricePerEvent,
+                category: editingVenue.category,
                 description: editingVenue.description || "",
             });
         }
-    }, [editingVenue, isModalOpen, reset]);
+    }, [editingVenue, reset]);
 
-    const onSubmit = async (data: any) => {
+    const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+        if (!editingVenue) {
+            toast.error("No venue selected");
+            return;
+        }
+
         try {
             setLoading(true);
-            
-            console.log('=== SUBMITTING EDIT ===');
-            console.log('Venue ID:', editingVenue._id);
-            console.log('Form Data:', data);
 
-            const updateData = {
-                ...data,
-                pricePerEvent: Number(data.pricePerEvent),
-                capacity: Number(data.capacity),
-            };
+            const updateData: Record<string, any> = { ...data };
+            delete updateData.image;
 
-            if (data?.image?.[0]) {
+            if (data.image?.[0]) {
                 updateData.image = await uploadImage(data.image[0]);
-            } else {
-                updateData.image = editingVenue.image;
             }
 
-            console.log('Update Data:', updateData);
-
             const result = await updateVenue(updateData, editingVenue._id);
-            console.log('Result:', result);
 
-            if (result.modifiedCount > 0) {
-                toast.success("Venue updated successfully");
+            if (result.modifiedCount) {
                 setIsModalOpen(false);
+                toast.success("Venue updated successfully");
+
                 setTimeout(() => {
                     window.location.reload();
                 }, 500);
-            } else {
-                toast.warning("No changes were made");
-                setLoading(false);
             }
-        } catch (error: any) {
-            console.error('Update error:', error);
-            toast.error(error?.message || "Something went wrong");
-            setLoading(false);
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong");
         } finally {
             setEditingVenue(null);
+            setLoading(false);
         }
     };
 
@@ -104,126 +119,180 @@ const EditVenueModal = ({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-            <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white/80 backdrop-blur-md border border-[#D4AF37]/20 rounded-3xl shadow-xl p-5 md:p-8">
-                <div className="text-center mb-6">
-                    <h1 className="text-3xl font-bold text-[#0A2F1D]">Edit Venue</h1>
-                    <p className="text-sm text-[#12201B]/70 mt-2">Update your venue details below.</p>
+            <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white/70 backdrop-blur-md border border-[#0A2F1D]/10 rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-6 md:p-8">
+
+                {/* Header */}
+                <div className="mb-6 text-center">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-[#0A2F1D]">
+                        Edit Venue
+                    </h1>
+                    <p className="text-sm sm:text-base text-slate-600 mt-2">
+                        Update the venue listing details below.
+                    </p>
                 </div>
 
-                <Card className="p-5 md:p-7">
-                    <div className="bg-[#F0F7F4] border border-[#D4AF37]/20 rounded-2xl p-4 mb-6">
-                        {editingVenue?.image && (
-                            <Image
-                                src={editingVenue.image}
-                                alt={editingVenue.name}
-                                width={250}
-                                height={180}
-                                className="rounded-xl object-cover mx-auto"
-                            />
-                        )}
-                    </div>
+                {/* Card */}
+                <Card className="p-4 sm:p-6 md:p-8 border border-[#0A2F1D]/5 bg-white">
 
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                        {/* Image */}
+                    {/* Info Box */}
+                    {(() => {
+                        const imageUrl = editingVenue?.image;
+                        if (!imageUrl) return null;
+
+                        return (
+                            <div className="bg-[#F0F7F4] border border-[#0A2F1D]/10 rounded-2xl p-4 mb-6 text-center">
+                                <Image
+                                    src={imageUrl}
+                                    alt={editingVenue.name}
+                                    width={200}
+                                    height={200}
+                                    className="h-auto max-h-40 object-cover rounded-xl mx-auto shadow-sm"
+                                />
+                            </div>
+                        );
+                    })()}
+
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6">
+
+                        {/* Cover Image */}
                         <div>
-                            <label className="block mb-2 font-semibold text-[#0A2F1D]">Venue Image</label>
+                            <label className="block mb-2 font-semibold text-[#0A2F1D] text-sm sm:text-base">
+                                Venue Banner Image
+                            </label>
                             <Input
                                 type="file"
                                 accept="image/*"
+                                className="w-full sm:w-2/3 md:w-1/2"
                                 {...register("image")}
                             />
-                            <p className="text-xs text-gray-400 mt-1">Leave empty to keep current image</p>
+                            <p className="text-xs text-slate-400 mt-1">Leave empty to keep current photo</p>
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-5">
+                        {/* Title + Location */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                             <div>
-                                <label className="block mb-2 font-semibold text-[#0A2F1D]">Venue Name</label>
+                                <label className="block mb-2 font-semibold text-[#0A2F1D] text-sm sm:text-base">
+                                    Venue Name
+                                </label>
                                 <Input
+                                    defaultValue={editingVenue?.name}
+                                    placeholder="Enter the Venue Name"
+                                    className="w-full"
                                     {...register("name", { required: "Venue name is required" })}
                                 />
                                 {errors.name && (
-                                    <p className="text-red-500 text-sm">
-                                        {errors.name.message as string}
-                                    </p>
+                                    <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
                                 )}
                             </div>
 
                             <div>
-                                <label className="block mb-2 font-semibold text-[#0A2F1D]">Location</label>
+                                <label className="block mb-2 font-semibold text-[#0A2F1D] text-sm sm:text-base">
+                                    Location
+                                </label>
                                 <Input
+                                    defaultValue={editingVenue?.location}
+                                    placeholder="e.g. Gulshan, Dhaka"
+                                    className="w-full"
                                     {...register("location", { required: "Location is required" })}
                                 />
                                 {errors.location && (
-                                    <p className="text-red-500 text-sm">
-                                        {errors.location.message as string}
-                                    </p>
+                                    <p className="text-red-500 text-sm mt-1">{errors.location.message}</p>
                                 )}
                             </div>
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-5">
+                        {/* Price + Capacity */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                             <div>
-                                <label className="block mb-2 font-semibold text-[#0A2F1D]">Price Per Event</label>
+                                <label className="block mb-2 font-semibold text-[#0A2F1D] text-sm sm:text-base">
+                                    Price Per Event ($)
+                                </label>
                                 <Input
+                                    defaultValue={editingVenue?.pricePerEvent?.toString()}
                                     type="number"
+                                    placeholder="Enter the booking fee"
+                                    className="w-full"
                                     {...register("pricePerEvent", {
-                                        required: "Price is required",
-                                        valueAsNumber: true
+                                        valueAsNumber: true,
+                                        required: "Price per event is required",
+                                        min: { value: 0, message: "Price cannot be negative" },
                                     })}
                                 />
+                                {errors.pricePerEvent && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.pricePerEvent.message}</p>
+                                )}
                             </div>
 
                             <div>
-                                <label className="block mb-2 font-semibold text-[#0A2F1D]">Capacity</label>
+                                <label className="block mb-2 font-semibold text-[#0A2F1D] text-sm sm:text-base">
+                                    Guest Capacity
+                                </label>
                                 <Input
+                                    defaultValue={editingVenue?.capacity?.toString()}
                                     type="number"
+                                    placeholder="Max guests allowed"
+                                    className="w-full"
                                     {...register("capacity", {
-                                        required: "Capacity is required",
-                                        valueAsNumber: true
+                                        valueAsNumber: true,
+                                        required: "Capacity limit is required",
+                                        min: { value: 1, message: "Capacity must be at least 1" },
                                     })}
                                 />
+                                {errors.capacity && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.capacity.message}</p>
+                                )}
                             </div>
                         </div>
 
+                        {/* Category Selection */}
                         <div>
-                            <label className="block mb-2 font-semibold text-[#0A2F1D]">Category</label>
+                            <label className="block mb-2 font-semibold text-[#0A2F1D] text-sm sm:text-base">
+                                Category
+                            </label>
                             <select
-                                {...register("category", { required: "Category required" })}
-                                className="w-full px-4 py-3 rounded-xl border border-[#D4AF37]/30 outline-none"
+                                defaultValue={editingVenue?.category}
+                                {...register("category", { required: "Category is required" })}
+                                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-[#0A2F1D] outline-none text-sm sm:text-base"
                             >
                                 <option value="">Select Category</option>
-                                {CATEGORIES.map(category => (
-                                    <option key={category} value={category}>
-                                        {category}
-                                    </option>
+                                {CATEGORIES.map((cat) => (
+                                    <option key={cat} value={cat}>{cat}</option>
                                 ))}
                             </select>
+                            {errors.category && (
+                                <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>
+                            )}
                         </div>
 
+                        {/* Description */}
                         <div>
-                            <label className="block mb-2 font-semibold text-[#0A2F1D]">Description</label>
+                            <label className="block mb-2 font-semibold text-[#0A2F1D] text-sm sm:text-base">
+                                Description
+                            </label>
                             <TextArea
+                                defaultValue={editingVenue?.description}
+                                placeholder="Describe the layout, special features, or booking terms..."
                                 className="w-full"
-                                rows={5}
-                                {...register("description", { required: "Description required" })}
+                                rows={6}
+                                {...register("description", { required: "Description is required" })}
                             />
+                            {errors.description && (
+                                <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
+                            )}
                         </div>
 
+                        {/* Control Buttons */}
                         <div className="flex gap-3">
                             <Button
                                 type="button"
-                                onPress={() => {
-                                    setIsModalOpen(false);
-                                    setEditingVenue(null);
-                                }}
-                                className="flex-1 border-[#D4AF37] text-[#0A2F1D]"
+                                onPress={() => setIsModalOpen(false)}
+                                className="flex-1 border border-[#0A2F1D]/20 text-[#0A2F1D] font-semibold py-5 sm:py-6 rounded-2xl hover:bg-[#F0F7F4] transition-all text-sm sm:text-base"
                             >
                                 Cancel
                             </Button>
-
                             <Button
                                 type="submit"
-                                className="flex-1 bg-[#0A2F1D] text-white"
+                                className="flex-1 bg-[#0A2F1D] text-white font-semibold py-5 sm:py-6 rounded-2xl hover:bg-[#1E6B4F] transition-all text-sm sm:text-base"
                             >
                                 {loading ? "Saving..." : "Save Changes"}
                             </Button>

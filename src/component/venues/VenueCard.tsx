@@ -19,6 +19,9 @@ interface VenueCardProps {
 }
 
 const VenueCard = ({ venue }: VenueCardProps) => {
+
+    console.log(venue, "venue");
+    
     return (
         <motion.div
             whileHover={{
@@ -32,9 +35,8 @@ const VenueCard = ({ venue }: VenueCardProps) => {
                 {/* Image */}
 
                 <div className="relative">
-
                     <Image
-                        src={venue.image}
+                        src={venue.image || "/placeholder-venue.jpg"}
                         alt={venue.name}
                         width={500}
                         height={350}
@@ -42,7 +44,7 @@ const VenueCard = ({ venue }: VenueCardProps) => {
                     />
 
                     {/* Subtle gradient so the badge always reads clearly over any photo */}
-                    <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/40 to-transparent" />
+                    <div className="absolute inset-x-0 top-0 h-20 bg-linear-to-b from-black/40 to-transparent" />
 
                     <Chip
                         size="sm"
@@ -63,59 +65,39 @@ const VenueCard = ({ venue }: VenueCardProps) => {
                 {/* Content */}
 
                 <div className="p-5 space-y-3">
-
                     <div className="flex justify-between items-start gap-3">
-
                         <h2 className="text-xl font-bold text-[#0A2F1D] line-clamp-1">
                             {venue.name}
                         </h2>
-
                         <span className="text-lg font-bold text-[#D4AF37] whitespace-nowrap">
                             ${venue.pricePerEvent.toLocaleString()}
                         </span>
-
                     </div>
-
                     <div className="flex items-center gap-2 text-[#12201B]/60 text-sm">
-
                         <FaMapMarkerAlt className="text-[#D4AF37]" />
-
                         <span className="line-clamp-1">{venue.location}</span>
-
                     </div>
-
                     <div className="flex items-center justify-between pt-1">
-
                         <Chip
                             size="sm"
                             className="bg-[#F0F7F4] text-[#0A2F1D] font-medium border border-[#D4AF37]/20"
                         >
                             {venue.category}
                         </Chip>
-
                         <div className="flex items-center gap-1.5 text-sm text-[#12201B]/70">
-
                             <FaUsers className="text-[#D4AF37]" />
-
                             {venue.capacity} guests
-
                         </div>
-
                     </div>
-
                     <Link href={`/venues/${venue._id}`} className="block pt-1">
-
                         <Button
                             fullWidth
                             className="bg-[#0A2F1D] hover:bg-[#1E6B4F] text-white rounded-xl font-semibold transition-colors"
                         >
                             View Details
                         </Button>
-
                     </Link>
-
                 </div>
-
             </Card>
         </motion.div>
     );
