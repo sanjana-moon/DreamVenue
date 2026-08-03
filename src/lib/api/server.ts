@@ -9,15 +9,6 @@ const getToken = async (): Promise<string | null> => {
         headers: await headers(),
     });
 
-    console.log("\n========== GET TOKEN ==========");
-    console.log("Token Exists:", !!token);
-
-    if (token) {
-        console.log("Preview:", token.substring(0, 40) + "...");
-    }
-
-    console.log("===============================\n");
-
     return token;
 };
 

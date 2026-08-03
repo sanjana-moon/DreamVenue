@@ -47,11 +47,11 @@ export default function AboutSection() {
                         <div className="absolute -left-5 -top-5 h-full w-full rounded-[32px] border-2 border-[#D4AF37]" />
 
                         <Image
-                            src="/about.jpg"
+                            src="https://images.pexels.com/photos/17056998/pexels-photo-17056998.jpeg"
                             alt="DreamVenue"
                             width={700}
                             height={650}
-                            className="relative rounded-[32px] object-cover shadow-2xl"
+                            className="relative rounded-[32px] object-cover shadow-xl"
                         />
 
                     </motion.div>

@@ -94,7 +94,7 @@ export default async function VenueDetailsPage({
                                 className="object-cover w-full hover:scale-105 transition-transform duration-700"
                             />
                             {/* Gradient Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#0A2F1D]/30 via-transparent to-transparent"></div>
+                            {/* <div className="absolute inset-0 bg-gradient-to-t from-[#0A2F1D]/30 via-transparent to-transparent"></div> */}
                             
                             {/* Badge */}
                             <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg">

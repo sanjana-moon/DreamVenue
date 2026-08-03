@@ -68,7 +68,7 @@ const FeaturedVenues = ({
                         <Link href="/venues">
                             <Button
                                 size="lg"
-                                className="bg-[#0A2F1D] px-8 text-white hover:bg-[#1E6B4F]"
+                                className="bg-[#0A2F1D] px-8 text-white hover:bg-[#1E6B4F] rounded-md"
                             >
                                 Browse All Venues
                             </Button>
