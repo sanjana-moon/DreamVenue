@@ -140,11 +140,6 @@ const Navbar = () => {
             {
                 key: "profile",
                 label: "Profile",
-                href: "/dashboard/customer/profile",
-            },
-            {
-                key: "profile",
-                label: "Profile",
                 href: "/dashboard/profile",
             },
         ];

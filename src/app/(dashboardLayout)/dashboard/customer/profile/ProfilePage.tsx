@@ -116,8 +116,6 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
             setProfile(updatedProfile);
             setIsEditing(false);
             
-            // Show success message (optional)
-            // You can add a toast notification here
             console.log("Profile updated successfully!");
         } catch (err) {
             console.error("Error updating profile:", err);
