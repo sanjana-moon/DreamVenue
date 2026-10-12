@@ -13,10 +13,6 @@ const FeaturedVenues = ({
     featured,
 }: FeaturedVenuesProps) => {
 
-    console.log(featured, "featured");
-
-    
-
     return (
         <section className="bg-[#F0F7F4] py-24">
             <div className="container mx-auto px-4">

@@ -27,8 +27,6 @@ export const serverMutation = async <TResponse = unknown, TBody = unknown>(
         body: JSON.stringify(data),
     });
 
-    console.log("Response:", res.status);
-
     return res.json() as Promise<TResponse>;
 };
 
@@ -44,8 +42,6 @@ export const deleteMutation = async <TResponse = unknown>(
         },
     });
 
-    console.log("Response:", res.status);
-
     return res.json() as Promise<TResponse>;
 };
 
@@ -58,9 +54,7 @@ export const serverFetch = async <TResponse = unknown>(
     };
 
     if (isProtected) {
-        const token = await getToken();
-
-        console.log("Token Exists:", !!token);
+        const token = await getToken()
 
         options.headers = {
             Authorization: `Bearer ${token}`,

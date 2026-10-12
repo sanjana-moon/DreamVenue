@@ -43,7 +43,6 @@ export default function ManageBookingsClient({
 
             toast.success("Booking status updated.");
         } catch (error) {
-            console.error(error);
             toast.error("Failed to update booking.");
         }
     };

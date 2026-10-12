@@ -19,8 +19,6 @@ interface VenueCardProps {
 }
 
 const VenueCard = ({ venue }: VenueCardProps) => {
-
-    console.log(venue, "venue");
     
     return (
         <motion.div

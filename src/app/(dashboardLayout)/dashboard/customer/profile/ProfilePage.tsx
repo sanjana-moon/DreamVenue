@@ -116,7 +116,6 @@ export default function ProfilePage({ initialProfile, error: initialError }: Pro
             setProfile(updatedProfile);
             setIsEditing(false);
             
-            console.log("Profile updated successfully!");
         } catch (err) {
             console.error("Error updating profile:", err);
             setError(err instanceof Error ? err.message : "Failed to update profile. Please try again.");

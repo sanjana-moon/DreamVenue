@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Button, Avatar } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { usePathname, useRouter } from "next/navigation";
 import { TfiAlignLeft } from "react-icons/tfi";
 import { RxCross2, RxAvatar } from "react-icons/rx";
@@ -15,22 +15,26 @@ import Link from "next/link";
 import logo from "@/component/assets/images/Logo.png";
 import { authClient } from "@/lib/auth-client";
 
+// ✅ Create MotionButton ONCE at module scope
+const MotionButton = motion.create(Button);
+
+// ✅ Client-detection hook — no useEffect, no cascading render
+const emptySubscribe = () => () => {};
+const getSnapshot = () => true;
+const getServerSnapshot = () => false;
+const useIsMounted = () =>
+    useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot);
+
 const Navbar = () => {
     const pathname = usePathname();
     const router = useRouter();
 
-    const MotionButton = motion.create(Button);
-
-    const [isMounted, setIsMounted] = useState(false);
+    const isMounted = useIsMounted();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isAuthMenuOpen, setIsAuthMenuOpen] = useState(false);
 
     const { data: session } = authClient.useSession();
     const user = session?.user;
-
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
 
     const handleSignOut = async () => {
         await authClient.signOut();
@@ -43,22 +47,10 @@ const Navbar = () => {
             : "text-gray-600 hover:text-primary transition-colors";
 
     const navLinks = [
-        {
-            href: "/",
-            label: "Home",
-        },
-        {
-            href: "/venues",
-            label: "Venues",
-        },
-        {
-            href: "/about",
-            label: "About",
-        },
-        {
-            href: "/contact",
-            label: "Contact",
-        },
+        { href: "/", label: "Home" },
+        { href: "/venues", label: "Venues" },
+        { href: "/about", label: "About" },
+        { href: "/contact", label: "Contact" },
     ];
 
     const role = user?.role;
@@ -71,77 +63,25 @@ const Navbar = () => {
 
     if (role === "admin") {
         dashboardLinks = [
-            {
-                key: "overview",
-                label: "Overview",
-                href: "/dashboard/admin",
-            },
-            {
-                key: "users",
-                label: "Manage Users",
-                href: "/dashboard/admin/users",
-            },
-            {
-                key: "venues",
-                label: "Manage Venues",
-                href: "/dashboard/admin/manage-venues",
-            },
-            {
-                key: "bookings",
-                label: "Manage Bookings",
-                href: "/dashboard/admin/bookings",
-            },
-            {
-                key: "profile",
-                label: "Profile",
-                href: "/dashboard/profile",
-            },
+            { key: "overview", label: "Overview", href: "/dashboard/admin" },
+            { key: "users", label: "Manage Users", href: "/dashboard/admin/users" },
+            { key: "venues", label: "Manage Venues", href: "/dashboard/admin/manage-venues" },
+            { key: "bookings", label: "Manage Bookings", href: "/dashboard/admin/bookings" },
+            { key: "profile", label: "Profile", href: "/dashboard/profile" },
         ];
     } else if (role === "vendor") {
         dashboardLinks = [
-            {
-                key: "overview",
-                label: "Overview",
-                href: "/dashboard/vendor",
-            },
-            {
-                key: "addVenue",
-                label: "Add Venue",
-                href: "/dashboard/vendor/add-venue",
-            },
-            {
-                key: "myVenues",
-                label: "My Venues",
-                href: "/dashboard/vendor/my-venue",
-            },
-            {
-                key: "bookings",
-                label: "Venue Bookings",
-                href: "/dashboard/vendor/bookings",
-            },
-            {
-                key: "profile",
-                label: "Profile",
-                href: "/dashboard/profile",
-            },
+            { key: "overview", label: "Overview", href: "/dashboard/vendor" },
+            { key: "addVenue", label: "Add Venue", href: "/dashboard/vendor/add-venue" },
+            { key: "myVenues", label: "My Venues", href: "/dashboard/vendor/my-venue" },
+            { key: "bookings", label: "Venue Bookings", href: "/dashboard/vendor/bookings" },
+            { key: "profile", label: "Profile", href: "/dashboard/profile" },
         ];
     } else {
         dashboardLinks = [
-            {
-                key: "overview",
-                label: "Overview",
-                href: "/dashboard/customer",
-            },
-            {
-                key: "bookings",
-                label: "My Bookings",
-                href: "/dashboard/customer/bookings",
-            },
-            {
-                key: "profile",
-                label: "Profile",
-                href: "/dashboard/profile",
-            },
+            { key: "overview", label: "Overview", href: "/dashboard/customer" },
+            { key: "bookings", label: "My Bookings", href: "/dashboard/customer/bookings" },
+            { key: "profile", label: "Profile", href: "/dashboard/profile" },
         ];
     }
 
@@ -153,9 +93,9 @@ const Navbar = () => {
                     <Image
                         src={logo}
                         alt="DreamVenue"
-                        width={140}
-                        height={45}
-                        className="h-15 md:h-20 w-auto"
+                        width={100}
+                        height={30}
+                        className="h-10 md:h-15 w-auto"
                     />
                 </Link>
 
@@ -195,7 +135,6 @@ const Navbar = () => {
 
                 {/* RIGHT SECTION */}
                 <div className="flex items-center gap-3">
-
                     {/* DESKTOP AUTH */}
                     <div className="hidden lg:flex items-center gap-3">
                         {isMounted && user ? (
@@ -213,13 +152,8 @@ const Navbar = () => {
                                 />
 
                                 <MotionButton
-                                    whileHover={{
-                                        scale: 1.05,
-                                        y: -2,
-                                    }}
-                                    whileTap={{
-                                        scale: 0.95,
-                                    }}
+                                    whileHover={{ scale: 1.05, y: -2 }}
+                                    whileTap={{ scale: 0.95 }}
                                     transition={{
                                         type: "spring",
                                         stiffness: 400,
@@ -236,13 +170,8 @@ const Navbar = () => {
                             <>
                                 <Link href="/login">
                                     <MotionButton
-                                        whileHover={{
-                                            scale: 1.05,
-                                            y: -2,
-                                        }}
-                                        whileTap={{
-                                            scale: 0.95,
-                                        }}
+                                        whileHover={{ scale: 1.05, y: -2 }}
+                                        whileTap={{ scale: 0.95 }}
                                         transition={{
                                             type: "spring",
                                             stiffness: 400,
@@ -257,13 +186,8 @@ const Navbar = () => {
 
                                 <Link href="/register">
                                     <MotionButton
-                                        whileHover={{
-                                            scale: 1.05,
-                                            y: -2,
-                                        }}
-                                        whileTap={{
-                                            scale: 0.95,
-                                        }}
+                                        whileHover={{ scale: 1.05, y: -2 }}
+                                        whileTap={{ scale: 0.95 }}
                                         transition={{
                                             type: "spring",
                                             stiffness: 400,
@@ -281,12 +205,8 @@ const Navbar = () => {
 
                     {/* MOBILE MENU BUTTON */}
                     <motion.button
-                        whileHover={{
-                            scale: 1.1,
-                        }}
-                        whileTap={{
-                            scale: 0.9,
-                        }}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
                         className="lg:hidden"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                     >
@@ -299,12 +219,8 @@ const Navbar = () => {
 
                     {/* MOBILE USER BUTTON */}
                     <motion.button
-                        whileHover={{
-                            scale: 1.1,
-                        }}
-                        whileTap={{
-                            scale: 0.9,
-                        }}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
                         className="lg:hidden"
                         onClick={() => setIsAuthMenuOpen(!isAuthMenuOpen)}
                     >
@@ -322,25 +238,15 @@ const Navbar = () => {
                     </motion.button>
                 </div>
             </div>
+
             {/* MOBILE MENU */}
             <AnimatePresence>
                 {isMenuOpen && (
                     <motion.div
-                        initial={{
-                            opacity: 0,
-                            height: 0,
-                        }}
-                        animate={{
-                            opacity: 1,
-                            height: "auto",
-                        }}
-                        exit={{
-                            opacity: 0,
-                            height: 0,
-                        }}
-                        transition={{
-                            duration: 0.25,
-                        }}
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.25 }}
                         className="overflow-hidden border-t bg-white lg:hidden"
                     >
                         <ul className="flex flex-col gap-4 p-5">
@@ -386,24 +292,10 @@ const Navbar = () => {
             <AnimatePresence>
                 {isAuthMenuOpen && (
                     <motion.div
-                        initial={{
-                            opacity: 0,
-                            y: -10,
-                            scale: 0.95,
-                        }}
-                        animate={{
-                            opacity: 1,
-                            y: 0,
-                            scale: 1,
-                        }}
-                        exit={{
-                            opacity: 0,
-                            y: -10,
-                            scale: 0.95,
-                        }}
-                        transition={{
-                            duration: 0.2,
-                        }}
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
                         className="absolute right-4 top-20 z-50 lg:hidden"
                     >
                         <div className="min-w-60 rounded-2xl border bg-white p-5 shadow-xl">
@@ -428,12 +320,8 @@ const Navbar = () => {
                                     </div>
 
                                     <MotionButton
-                                        whileHover={{
-                                            scale: 1.03,
-                                        }}
-                                        whileTap={{
-                                            scale: 0.95,
-                                        }}
+                                        whileHover={{ scale: 1.03 }}
+                                        whileTap={{ scale: 0.95 }}
                                         onClick={handleSignOut}
                                         className="w-full bg-primary text-white"
                                     >
@@ -444,18 +332,14 @@ const Navbar = () => {
                             ) : (
                                 <div className="flex flex-col gap-3">
                                     <Link href="/login">
-                                        <Button
-                                            className="w-full bg-primary text-white"
-                                        >
+                                        <Button className="w-full bg-primary text-white">
                                             <MdLogin />
                                             Login
                                         </Button>
                                     </Link>
 
                                     <Link href="/register">
-                                        <Button
-                                            className="w-full border-primary text-primary"
-                                        >
+                                        <Button className="w-full border-primary text-primary">
                                             <LuUserRoundPlus />
                                             Register
                                         </Button>
